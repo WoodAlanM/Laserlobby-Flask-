@@ -137,7 +137,7 @@ $('#add_star_button').click(function(){
     fill: fill_color,
     left: 100,
     top: 10,
-    strokeWidth: parsetInt(width),
+    strokeWidth: parseInt(width),
     strokeLineJoin: 'bevil'
     },false);
     canvas.add(myStar);
