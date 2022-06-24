@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="static/css/jquery.fontpicker.css" media="screen,projection"/>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <script type="text/javascript" src="static/js/jquery-3.6.0.js"></script>
+        
+        <script src="static/js/jquery.fontpicker.js"></script>
+
+        <script> 
+            $(document).ready(function(){
+                var toggled = false;
+                $("#handle").click(function(){
+                    $("#panel").slideToggle("slow");
+                    if(toggled == false){
+                        $('#handle').text('Close')
+                        toggled = true
+                    }else{
+                        $('#handle').text('Upload Image')
+                        toggled = false
+                    }
+                });
+            });
+        </script>
+
+        <style>
+            #flip{
+                width: 200px;
+            }
+
+            #panel, #flip {
+                display: block;
+                margin: auto;
+                padding: 5px;
+                text-align: center;
+                background-color: white;
+                border: solid 1px black;
+                border-top: 0;
+                border-bottom-right-radius: 5px;
+                border-bottom-left-radius: 5px;
+            }
+
+            #panel {
+                width: 60%;
+                padding: 35px;
+                display: none;
+            }
+
+            #main_canvas{
+                outline: black 5px solid;
+            }
+
+            #main_canvas_div{
+                height: 100%;
+            }
+
+            #image_editing_div{
+                height: 70vh;
+            }
+
+            .row{
+                padding-top: 1em
+            }
+
+            tr, th, td {
+  		        border: none;
+	        }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div id="panel">
+                <table>
+                    <form id="upload_form" method="post" enctype="multipart/form-data">
+                        <tr>
+                            <td colspan="2" class="center">
+                                <!-- Upload Image for extraction -->
+                                <div class="file-field input-field">
+                                    <div class="btn">
+                                    <span>File</span>
+                                    <input id="file_selector" type="file" name="file">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <div class="center">
+                            <td>
+                                <div class="switch">
+                                    <label>
+                                        Remove Background:
+                                        <input id="rbcheck" type="checkbox">
+                                        <span class="lever"></span>
+                                        On
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn" id="upload" type="button">Upload</button>
+                            </td>
+                            </div>
+                        </tr>
+                    </form>
+                </table>
+            </div>
+        </div>
+        <div id="flip"><a id="handle" href="#">Upload Image</a></div>
+        <div id="image_editing_div"class="container">
+            <div id="editing_row" class="row">
+                <div class="col l2 m2 s2">
+                    <div class="controls">
+                        <table>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="select" type="button" onclick="changeAction(this)">Select</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="text" type="button" onclick="changeAction(this)">Text</button>
+                                </td>   
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="image" type="button" onclick="changeAction(this)">Image</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="draw" type="button" onclick="changeAction(this)">Draw</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="spray" type="button" onclick="changeAction(this)">Spray</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn green" id="objVAlignCenter">Vertical Align</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn green" id="objHAlignCenter">Horizontal Align</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn red" id="delete_btn" onclick="deleteItems()">Delete Selected</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="main_canvas_div" class="col l8 m8 s8">
+                    <canvas id="main_canvas"></canvas>
+                </div>
+                <div id="tool_options" class="col l2 m2 s2">
+                    <div id="text_options" class="hide">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input class="hide" id="font_input"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn" id="add_text" type="button" onclick="addText()">Add Text</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn modal-trigger" id="change_text" type="button" data-target="modal_change_text">Change Text</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="input-field col s12">
+                                        <select id="font_size">
+                                        </select>
+                                        <label>Font Size:</label>
+                                    </div>
+                                    <!-- Font size, Bold, Italic, Underline -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <div class="center">
+                                    <td>
+                                        <button class="btn" style="width: 31%" id="bold">B</button>
+                                        <button class="btn" style="width: 31%" id="italic">I</button>
+                                        <button class="btn" style="width: 31%" id="underline">U</button>
+                                    </td>
+                                </div>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="image_options" class="hide">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label>Select Image:</label>
+                                    <select id="image_select" class="browser-default">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn" style="width: 100%" id="add_image_button">Add</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- This displays the modal for editing text -->
+        <div id="modal_change_text" class="modal">
+            <div class="modal-content">
+                <h5>Change text to:</h5>
+                <div class="input-field col s6">
+                    <input placeholder="" id="edited_text" type="text" class="validate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="apply_edited_text" href="#!" onclick="changeText()" class="modal-close waves-effect waves-green btn-flat">Apply</a>
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+
+        <div class="center">
+            <h3><a href = "{{url_for('logout') }}">Logout</a></h3>
+        </div>
+        <!--JavaScript at end of body for optimized loading-->
+        <script type="text/javascript" src="static/js/fabric.js"></script>
+        <script type="text/javascript" src="static/js/main.js"></script>
+        <script type="text/javascript" src="static/js/materialize.min.js"></script>
+        <script type="text/javascript" src="static/js/init.js"></script>
+
+
+        
+        <!-- Checks for an image, if there is one then it loads it to the canvas -->
+        <script>
+            $('#upload').click(function(){
+                if($("#rbcheck").is(':checked')){
+                    var form_data = new FormData($('#upload_form')[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/upload_image_rb',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                    });
+                    $('#rbcheck').prop('checked', false);
+                    $('#handle').click()
+                }
+                else {
+                    var form_data = new FormData($('#upload_form')[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/upload_image',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                    });
+                    $('#handle').click()
+                }
+            });
+        </script>
+
+        <script>
+            $('#add_image_button').click(function(){
+                addImage($('#image_select').find(':selected').text())
+            });
+        </script>
+    </body>
+  </html>
