@@ -2,7 +2,7 @@ let erasingRemovesErasedObjects = false;
 const canvas = this.__canvas = new fabric.Canvas('main_canvas');
 
 function changeAction(target) {
-    ['select','text','image','draw','spray'].forEach(action => {
+    ['select','text','image','shapes','spray'].forEach(action => {
     const t = document.getElementById(action);
     t.classList.remove('btn-large');
     t.classList.remove('blue');
@@ -27,11 +27,10 @@ function changeAction(target) {
         $('#image_options').removeClass('hide');
         $('#image_options').addClass('show');
         break;
-    case "draw":
+    case "shapes":
         hideControls();
-        canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-        canvas.freeDrawingBrush.width = 35;
-        canvas.isDrawingMode = true;
+        $('#shapes_options').removeClass('hide');
+        $('#shapes_options').addClass('show');
         break;
     case "spray":
         hideControls();
@@ -44,6 +43,89 @@ function changeAction(target) {
     }   
 }
 
+// These are for adding shapes to the canvas
+$('#add_rect_button').click(function(){
+    var color_val = $('#color_range').val();
+    if($("#fillcheck").is(':checked')){
+        var fill_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        $('#fillcheck').prop('checked', false);
+    } else {
+        var fill_color = '';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+    }
+    var width = $("#stroke_width").find(':selected').text();
+    var rect = new fabric.Rect({
+        top: 10,
+        left: 10,
+        fill: fill_color,
+        width: 100,
+        height: 100,
+        stroke: stroke_color,
+        strokeWidth: parseInt(width)
+    });
+    canvas.add(rect)
+});
+
+$('#add_circle_button').click(function(){
+    var color_val = $('#color_range').val();
+    if($("#fillcheck").is(':checked')){
+        var fill_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        $('#fillcheck').prop('checked', false);
+    } else {
+        var fill_color = '';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+    }
+    var width = $("#stroke_width").find(':selected').text();
+    var circle = new fabric.Circle({
+        top: 10,
+        left: 10,
+        fill: fill_color,
+        radius: 50,
+        stroke: stroke_color,
+        strokeWidth: parseInt(width)
+    });
+    canvas.add(circle)
+});
+
+$('#add_triangle_button').click(function(){
+    var color_val = $('#color_range').val();
+    if($("#fillcheck").is(':checked')){
+        var fill_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        $('#fillcheck').prop('checked', false);
+    } else {
+        var fill_color = '';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+    }
+    var width = $("#stroke_width").find(':selected').text();
+    console.log(width)
+    var triangle = new fabric.Triangle({
+        top: 10,
+        left: 10,
+        fill: fill_color,
+        width: 100,
+        height: 100,
+        stroke: stroke_color,
+        strokeWidth: parseInt(width)
+    });
+    canvas.add(triangle)
+});
+
+// Fills stroke width select box
+function fillStrokeWidths(){
+    font_size_html ="";
+    for (let i = 1; i < 21; i++) {
+        font_size_html = font_size_html + "<option value=" + i + ">" + i + "</option>";    
+    }
+    $('#stroke_width').html(font_size_html);
+}
+
+$('#color_range').change(function(){
+    var newValue = this.value;
+    $('#color_preview').css('background-color', 'rgb(' + newValue + ',' + newValue + ',' + newValue + ')')
+});
 
 // Aligns items vertically or horizontally
 // GROUP ON SELECTION
@@ -149,7 +231,7 @@ function fillLocation(){
 
 // Hides control options for each main object
 function hideControls(){
-    ['text_options', 'image_options'].forEach(tools => {
+    ['text_options', 'image_options', 'shapes_options'].forEach(tools => {
         const tool = document.getElementById(tools);
         tool.classList.remove('show');
         tool.classList.add('hide');
@@ -323,4 +405,5 @@ canvas.on({
 init();
 fitToDiv(canvas);
 fillFontSizes()
+fillStrokeWidths()
 fillLocation()

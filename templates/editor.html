@@ -6,6 +6,7 @@
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="static/css/jquery.fontpicker.css" media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="static/css/main.css" media="screen,projection"/>
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -138,7 +139,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <button style="width: 100%" class="btn" id="draw" type="button" onclick="changeAction(this)">Draw</button>
+                                    <button style="width: 100%" class="btn" id="shapes" type="button" onclick="changeAction(this)">Shapes</button>
                                 </td>
                             </tr>
                             <tr>
@@ -218,6 +219,61 @@
                             <tr>
                                 <td>
                                     <button class="btn" style="width: 100%" id="add_image_button">Add</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="shapes_options" class="hide">
+                        <table>
+                            <tr>
+                                <td>
+                                    <button class="btn" style="width: 100%" id="add_rect_button">Add Rectangle</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn" style="width: 100%" id="add_circle_button">Add Circle</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn" style="width: 100%" id="add_triangle_button">Add Triangle</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="input-field col s12">
+                                        <select id="stroke_width">
+                                        </select>
+                                        <label>Stroke Width:</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="switch">
+                                        <label>
+                                            Fill:
+                                            <input id="fillcheck" type="checkbox">
+                                            <span class="lever"></span>
+                                            On
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Darkness Value:</label>
+                                    <form action="#">
+                                        <p class="range-field">
+                                          <input type="range" id="color_range" min="0" max="245" />
+                                        </p>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="color_preview"></div>
                                 </td>
                             </tr>
                         </table>
