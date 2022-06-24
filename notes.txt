@@ -1,1 +1,2 @@
-USE AJAX to call the upload image thing instead of a form post
+Make an image preview
+Reload image list on modal close

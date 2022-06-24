@@ -113,8 +113,6 @@ def upload_image():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))
-        #print('upload_image filename: ' + filename)
-        print('Image successfully uploaded and displayed below')
         # This is where the image will be turned into greyscale
         # Image is read into opencv
         image = cv2.imread(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))

@@ -22,7 +22,8 @@ function changeAction(target) {
         break;
     case "image":
         hideControls();
-        $('#image_select').empty()
+        $('#image_select').empty();
+        $('#image_select').append('<option value="" disabled selected>Choose Image</option>');
         getList();
         $('#image_options').removeClass('hide');
         $('#image_options').addClass('show');
@@ -41,7 +42,13 @@ function changeAction(target) {
     default:
         break;
     }   
-}
+};
+
+// Changes image preview to display selected image
+$('#image_select').change(function(){
+    var filename = $("#image_select").find(':selected').text();
+    $('#image_preview').attr('src', '/static/uploads/grays/' + filename)
+});
 
 // These are for adding shapes to the canvas
 $('#add_rect_button').click(function(){
@@ -100,7 +107,6 @@ $('#add_triangle_button').click(function(){
         var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
     }
     var width = $("#stroke_width").find(':selected').text();
-    console.log(width)
     var triangle = new fabric.Triangle({
         top: 10,
         left: 10,
@@ -111,6 +117,79 @@ $('#add_triangle_button').click(function(){
         strokeWidth: parseInt(width)
     });
     canvas.add(triangle)
+});
+
+$('#add_star_button').click(function(){
+    var color_val = $('#color_range').val();
+    if($("#fillcheck").is(':checked')){
+        var fill_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        $('#fillcheck').prop('checked', false);
+    } else {
+        var fill_color = '';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+    }
+    var width = $("#stroke_width").find(':selected').text();
+    var points=starPolygonPoints(5,50,25);
+
+    var myStar = new fabric.Polygon(points, {
+    stroke: stroke_color,
+    fill: fill_color,
+    left: 100,
+    top: 10,
+    strokeWidth: parsetInt(width),
+    strokeLineJoin: 'bevil'
+    },false);
+    canvas.add(myStar);
+
+
+});
+
+// Creates the star
+function starPolygonPoints(spikeCount, outerRadius, innerRadius) {
+    var rot = Math.PI / 2 * 3;
+    var cx = outerRadius;
+    var cy = outerRadius;
+    var sweep = Math.PI / spikeCount;
+    var points = [];
+    var angle = 60;
+
+    for (var i = 0; i < spikeCount; i++) {
+    var x = cx + Math.cos(angle) * outerRadius;
+    var y = cy + Math.sin(angle) * outerRadius;
+    points.push({x: x, y: y});
+    angle += sweep;
+
+    x = cx + Math.cos(angle) * innerRadius;
+    y = cy + Math.sin(angle) * innerRadius;
+    points.push({x: x, y: y});
+    angle += sweep
+    }
+    return (points);
+}
+
+$('#add_heart_button').click(function(){
+    var color_val = $('#color_range').val();
+    if($("#fillcheck").is(':checked')){
+        var fill_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+        $('#fillcheck').prop('checked', false);
+    } else {
+        var fill_color = '';
+        var stroke_color = 'rgb(' + color_val + ',' + color_val + ',' + color_val + ')';
+    }
+    var width = $("#stroke_width").find(':selected').text();
+    var path = new fabric.Path('M 272.70141,238.71731 \
+    C 206.46141,238.71731 152.70146,292.4773 152.70146,358.71731  \
+    C 152.70146,493.47282 288.63461,528.80461 381.26391,662.02535 \
+    C 468.83815,529.62199 609.82641,489.17075 609.82641,358.71731 \
+    C 609.82641,292.47731 556.06651,238.7173 489.82641,238.71731  \
+    C 441.77851,238.71731 400.42481,267.08774 381.26391,307.90481 \
+    C 362.10311,267.08773 320.74941,238.7173 272.70141,238.71731  \
+    z ');    
+    var scale = 100 / path.width;
+    path.set({ left: 10, top: 10, scaleX: scale, scaleY: scale,  fill: fill_color, stroke: stroke_color, strokeWidth: parseInt(width) });
+    canvas.add(path);
 });
 
 // Fills stroke width select box
@@ -169,6 +248,8 @@ canvas.on("selection:updated", function(e) {
 
 // Populates the list of images.
 function getList(){
+    $('#image_select').empty();
+    $('#image_select').append('<option value="" disabled selected>Choose Image</option>');
     $.ajax({
         type: 'POST',
         url: '/fill_list',
@@ -177,7 +258,6 @@ function getList(){
             populateList(name_list);
         }
     });
-    
 }
 
 function populateList(a_name_list){
