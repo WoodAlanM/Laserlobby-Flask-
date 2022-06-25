@@ -40,13 +40,19 @@
 
     <body>
         <div class="navbar-fixed">
+            <ul id="user_dropdown" class="dropdown-content">
+                <li><a href="#!" id="save_canvas">Save Canvas</a></li>
+                <li><a href="#!" id="load_canvas">Load Canvas</a></li>
+                <li class="divider"></li>
+                <li><a href="#!">Profile</a></li>
+                <li class="divider"></li>
+                <li><a href = "{{url_for('logout') }}">Logout</a></li>
+            </ul>
             <nav class="blue">
                 <div class="nav-wrapper container">
                     <a style="padding-left: 1em;" href="#!" class="brand-logo">LaserLobby</a>
-                    <ul style="padding-right: 1em;" class="right hide-on-med-and-down">
-                        <li><a href="#" id="save_canvas">Save Canvas</a></li>
-                        <li><a href="#" id="load_canvas">Load Canvas</a></li>
-                        <li><a href = "{{url_for('logout') }}">Logout</a></li>
+                    <ul style="padding-right: 1em;" class="right hide-on-med-and-down">               
+                        <li><a class="dropdown-trigger" href="#!" data-target="user_dropdown">Some User<i class="material-icons right">arrow_drop_down</i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -330,11 +336,17 @@
                 }
             });
         </script>
-
+        
+        <!-- Adds image to the canvas -->
         <script>
             $('#add_image_button').click(function(){
                 addImage($('#image_select').find(':selected').text())
             });
         </script>
+        <script>
+            $( document ).ready(function(){
+                $(".dropdown-trigger").dropdown();
+            });
+        </script>        
     </body>
-  </html>
+</html>

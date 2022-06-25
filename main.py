@@ -53,6 +53,7 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         user = UserModel.query.filter_by(email = email).first()
+        print(user.username)
         if user is not None and user.check_password(request.form['password']):
             login_user(user)
             return redirect('/editor')
@@ -83,7 +84,7 @@ def login():
 
 @app.route('/editor')
 @login_required
-def blog():
+def editor():
     return render_template('editor.html')
 
 
@@ -236,7 +237,7 @@ def fill_list():
 @login_required
 def save_canvas_json():
     save_json = request.get_json(force=True)
-    with open('data.txt', 'w') as out_file:
+    with open('data.json', 'w') as out_file:
         json.dump(save_json, out_file, sort_keys = True, indent = 4, ensure_ascii = False)
     return "saved"
 
@@ -244,8 +245,10 @@ def save_canvas_json():
 @app.route('/load_canvas_json', methods=['POST'])
 @login_required
 def load_canvas_json():
-    # This is where we'll load the json file and return it
-    return "saved"
+    filename = os.path.join(BASEDIR, 'data.json')
+    with open(filename) as json_file:
+        data = json.load(json_file)
+    return data
 
 
 if __name__ == '__main__':

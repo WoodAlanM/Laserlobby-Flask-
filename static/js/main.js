@@ -57,6 +57,7 @@ $('#save_canvas').on('click', function(){
             }
         }
     });
+    canvas.clear()
 });
 
 // Load canvas stuff
@@ -64,11 +65,8 @@ $('#load_canvas').on('click', function(){
     $.ajax({
         type: 'POST',
         url: '/load_canvas_json',
-        data: canvas_json,
         success: function(return_data){
-            if(return_data == "saved"){
-                M.toast({html: 'File Saved!'})
-            }
+            canvas.loadFromJSON(return_data)
         }
     });
 });
