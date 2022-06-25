@@ -24,8 +24,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 UPLOAD_FOLDER = 'static/uploads/temp/'
-GRAY_FOLDER = 'static/uploads/grays/'
-DELETE_TEMP = join(dirname(realpath(__file__)), 'static/uploads/temp/')
+USERS_FOLDER = 'static/users/'
 
 GRAY_LIST = []
 
@@ -60,25 +59,36 @@ def login():
     return render_template('login.html')
 
 
-# @app.route('/register', methods=['POST', 'GET'])
-# def register():
-#     if current_user.is_authenticated:
-#         return redirect('/editor')
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if current_user.is_authenticated:
+        return redirect('/editor')
      
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         username = request.form['username']
-#         password = request.form['password']
+    if request.method == 'POST':
+        first_name = request.form['first']
+        last_name = request.form['last']
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
  
-#         if UserModel.query.filter_by(email=email).first():
-#             return ('Email already Present')
-             
-#         user = UserModel(email=email, username=username)
-#         user.set_password(password)
-#         db.session.add(user)
-#         db.session.commit()
-#         return redirect('/login')
-#     return render_template('register.html')
+        if UserModel.query.filter_by(email=email).first():
+            return ('Email already in use.')
+            if UserModel.query.filter_by(username=username).first():
+                return ('Username already in use.')
+    
+        # Make directory for user
+        os.mkdir(os.path.join(BASEDIR, USERS_FOLDER, username))
+        # Make canvases, grays, and temp folder for each user
+        os.mkdir(os.path.join(BASEDIR, USERS_FOLDER, username, 'canvases'))
+        os.mkdir(os.path.join(BASEDIR, USERS_FOLDER, username, 'grays'))
+        os.mkdir(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp'))
+
+        user = UserModel(first_name=first_name, last_name=last_name, email=email, username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/login')
+    return render_template('register.html')
 
 
 @app.route('/editor')
@@ -104,6 +114,7 @@ def index():
 @app.route('/upload_image', methods=['POST'])
 @login_required
 def upload_image():
+    username = current_user.username
     if 'file' not in request.files:
         print('No file part')
         return redirect(request.url)
@@ -113,18 +124,18 @@ def upload_image():
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))
+        file.save(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
         # This is where the image will be turned into greyscale
         # Image is read into opencv
-        image = cv2.imread(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))
+        image = cv2.imread(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
         # Image is converted to greyscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # working directory is changed
-        os.chdir(os.path.join(BASEDIR, GRAY_FOLDER))
+        os.chdir(os.path.join(BASEDIR, USERS_FOLDER, username, 'grays'))
         # opencv saves the greyscale version
         cv2.imwrite(filename, gray)
         # original image is deleted
-        os.remove(os.path.join(DELETE_TEMP, filename))
+        os.remove(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
         return filename
     else:
         print('Allowed image types are - png, jpg, jpeg')
@@ -135,6 +146,7 @@ def upload_image():
 @app.route('/upload_image_rb', methods=['POST'])
 @login_required
 def upload_image_rb():
+    username = current_user.username
     if 'file' not in request.files:
         print('No file part')
         return redirect(request.url)
@@ -144,14 +156,14 @@ def upload_image_rb():
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))
+        file.save(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
         # This is where the image will be turned into greyscale
         # Image is read into opencv
-        image = cv2.imread(os.path.join(BASEDIR, UPLOAD_FOLDER, filename))
+        image = cv2.imread(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
         # Image is converted to greyscale
         # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # working directory is changed
-        os.chdir(os.path.join(BASEDIR, GRAY_FOLDER))
+        os.chdir(os.path.join(BASEDIR, USERS_FOLDER, username, 'grays'))
         #new stuff starts here
         #get height and width of image
         height, width, channels = image.shape
@@ -212,9 +224,9 @@ def upload_image_rb():
         #saves file to grays folder
         rgba_gray.save(filename, 'PNG')
         # original and temp images are deleted
-        os.remove(os.path.join(DELETE_TEMP, filename))
-        os.remove(os.path.join(BASEDIR, GRAY_FOLDER, 'temp.png'))
-        os.remove(os.path.join(BASEDIR, GRAY_FOLDER, 'tempgray.jpg'))
+        os.remove(os.path.join(BASEDIR, USERS_FOLDER, username, 'temp', filename))
+        os.remove(os.path.join(BASEDIR, USERS_FOLDER, username, 'grays', 'temp.png'))
+        os.remove(os.path.join(BASEDIR, USERS_FOLDER, username, 'grays', 'tempgray.jpg'))
         return filename
     else:
         print('Allowed image types are - png, jpg, jpeg')
@@ -224,7 +236,7 @@ def upload_image_rb():
 @app.route('/fill_list', methods=['POST'])
 @login_required
 def fill_list():
-    for (root,dirs,files) in os.walk(os.path.join(BASEDIR, GRAY_FOLDER)):
+    for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'grays')):
         for name in files:
             if not name in GRAY_LIST:
                 GRAY_LIST.append(name)
@@ -244,17 +256,63 @@ def save_canvas_json():
 @app.route('/load_canvas_json', methods=['POST'])
 @login_required
 def load_canvas_json():
-    filename = os.path.join(BASEDIR, 'data.json')
+    # Change so a name for the canvas needs to be entered
+    filename = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'cavnases', 'data.json')
     with open(filename) as json_file:
         data = json.load(json_file)
     return data
 
 
-@app.route('/get_user_info', methods=['POST'])
+@app.route('/profile', methods=['POST', 'GET'])
 @login_required
-def get_user_info():
+def profile():
+    if request.method == 'POST':
+        current_id = current_user.id
+        user = UserModel.query.filter_by(id=current_id).first()
+        email = request.form['email']
+        username = request.form['username']
+        first = request.form['first']
+        last = request.form['last']
+        if first:
+            user.first = first
+        if last:
+            user.last = last
+        if username:
+            user.username = username
+        if email:
+            user.email = email
+        db.session.commit()
+        return redirect('/profile')
+    return render_template('profile.html')
+
+
+@app.route('/get_user_username', methods=['POST'])
+@login_required
+def get_user_username():
     username = current_user.username
     return str(username)
+
+
+@app.route('/get_user_email', methods=['POST'])
+@login_required
+def get_user_email():
+    email = current_user.email
+    return str(email)
+
+
+@app.route('/get_user_first_name', methods=['POST'])
+@login_required
+def get_user_first_name():
+    first = current_user.first_name
+    return str(first)
+
+
+@app.route('/get_user_last_name', methods=['POST'])
+@login_required
+def get_user_last_name():
+    last = current_user.last_name
+    return str(last)
+
 
 if __name__ == '__main__':
     

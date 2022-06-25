@@ -10,6 +10,8 @@ class UserModel(UserMixin, db.Model):
     __tablename__ = 'users'
  
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100))
+    last_name = db.Column(db.String(100))
     email = db.Column(db.String(80), unique=True)
     username = db.Column(db.String(100))
     password_hash = db.Column(db.String())

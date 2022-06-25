@@ -1,1 +1,0 @@
-make a ajax call to get current user on document load so that i can change out some user label on dropdown box

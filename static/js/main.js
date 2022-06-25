@@ -1,3 +1,14 @@
+username = ''
+$(document).ready(function(){
+    $.ajax({
+        type: 'POST',
+        url: '/get_user_username',
+        success: function(data){
+            username = data;
+        }
+    });
+});
+
 let erasingRemovesErasedObjects = false;
 const canvas = this.__canvas = new fabric.Canvas('main_canvas');
 
@@ -73,8 +84,9 @@ $('#load_canvas').on('click', function(){
 
 // Changes image preview to display selected image
 $('#image_select').change(function(){
+
     var filename = $("#image_select").find(':selected').text();
-    $('#image_preview').attr('src', '/static/uploads/grays/' + filename)
+    $('#image_preview').attr('src', '/static/users/' + username + '/grays/' + filename)
 });
 
 // These are for adding shapes to the canvas
@@ -346,7 +358,7 @@ function hideControls(){
 }
 
 function addImage(filename){
-    fabric.Image.fromURL('static/uploads/grays/' + filename, function(myImg) {
+    fabric.Image.fromURL('static/users/' + username + '/grays/' + filename, function(myImg) {
         canvas.add(myImg); 
     });
 }
