@@ -44,6 +44,35 @@ function changeAction(target) {
     }   
 };
 
+// Save canvas stuff
+$('#save_canvas').on('click', function(){
+    var canvas_json = JSON.stringify(canvas);
+    $.ajax({
+        type: 'POST',
+        url: '/save_canvas_json',
+        data: canvas_json,
+        success: function(return_data){
+            if(return_data == "saved"){
+                M.toast({html: 'File Saved!'})
+            }
+        }
+    });
+});
+
+// Load canvas stuff
+$('#load_canvas').on('click', function(){
+    $.ajax({
+        type: 'POST',
+        url: '/load_canvas_json',
+        data: canvas_json,
+        success: function(return_data){
+            if(return_data == "saved"){
+                M.toast({html: 'File Saved!'})
+            }
+        }
+    });
+});
+
 // Changes image preview to display selected image
 $('#image_select').change(function(){
     var filename = $("#image_select").find(':selected').text();

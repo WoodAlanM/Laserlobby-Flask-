@@ -9,6 +9,7 @@ from flask_login import login_required, current_user, login_user, logout_user
 from models import UserModel,db,login
 import numpy as np
 from PIL import Image, ImageOps
+import codecs
 
 app = Flask(__name__)
 
@@ -229,6 +230,22 @@ def fill_list():
                 GRAY_LIST.append(name)
     gray_list_string = "!and!".join(GRAY_LIST)
     return gray_list_string
+
+
+@app.route('/save_canvas_json', methods=['POST'])
+@login_required
+def save_canvas_json():
+    save_json = request.get_json(force=True)
+    with open('data.txt', 'w') as out_file:
+        json.dump(save_json, out_file, sort_keys = True, indent = 4, ensure_ascii = False)
+    return "saved"
+
+
+@app.route('/load_canvas_json', methods=['POST'])
+@login_required
+def load_canvas_json():
+    # This is where we'll load the json file and return it
+    return "saved"
 
 
 if __name__ == '__main__':
