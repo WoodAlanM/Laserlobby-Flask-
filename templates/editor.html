@@ -52,7 +52,7 @@
                 <div class="nav-wrapper container">
                     <a style="padding-left: 1em;" href="#!" class="brand-logo">LaserLobby</a>
                     <ul style="padding-right: 1em;" class="right hide-on-med-and-down">               
-                        <li><a class="dropdown-trigger" href="#!" data-target="user_dropdown">Some User<i class="material-icons right">arrow_drop_down</i></a></li>
+                        <li><a id="username_dropdown" class="dropdown-trigger" href="#!" data-target="user_dropdown"></a></li>
                     </ul>
                 </div>
             </nav>
@@ -347,6 +347,18 @@
             $( document ).ready(function(){
                 $(".dropdown-trigger").dropdown();
             });
-        </script>        
+        </script>   
+        
+        <script>
+            $(document).ready(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_user_info',
+                    success: function(data){
+                        $('#username_dropdown').html(data + '<i class="material-icons right">arrow_drop_down</i>')
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

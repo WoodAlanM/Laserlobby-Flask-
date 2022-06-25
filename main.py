@@ -53,7 +53,6 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         user = UserModel.query.filter_by(email = email).first()
-        print(user.username)
         if user is not None and user.check_password(request.form['password']):
             login_user(user)
             return redirect('/editor')
@@ -250,6 +249,12 @@ def load_canvas_json():
         data = json.load(json_file)
     return data
 
+
+@app.route('/get_user_info', methods=['POST'])
+@login_required
+def get_user_info():
+    username = current_user.username
+    return str(username)
 
 if __name__ == '__main__':
     
