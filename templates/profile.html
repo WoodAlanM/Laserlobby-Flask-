@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <!--Import Google Icon Font-->
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <!--Import materialize.css-->
+            <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
+            <link type="text/css" rel="stylesheet" href="static/css/jquery.fontpicker.css" media="screen,projection"/>
+            <link type="text/css" rel="stylesheet" href="static/css/main.css" media="screen,projection"/>
+            <!--Let browser know website is optimized for mobile-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+            <script type="text/javascript" src="static/js/jquery-3.6.0.js"></script>
+        </head>
+
+        <body>
+            <div class="navbar-fixed">
+                <ul id="user_dropdown" class="dropdown-content">
+                    <li><a href = "{{url_for('editor') }}">Back to Editor</a></li>
+                    <li class="divider"></li>
+                    <li><a href = "{{url_for('logout') }}">Logout</a></li>
+                </ul>
+                <nav class="blue">
+                    <div class="nav-wrapper container">
+                        <a style="padding-left: 1em;" href="#!" class="brand-logo">LaserLobby</a>
+                        <ul style="padding-right: 1em;" class="right hide-on-med-and-down">               
+                            <li><a id="username_dropdown" class="dropdown-trigger" href="#!" data-target="user_dropdown"></a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="container center col offset-s4 s4">
+                    <div class="center">
+                        <h5 class="center">PROFILE</h5>
+                    </div>
+                    <table>
+                        <tr>
+                            <td><h5>Name:</h5></td>
+                            <td><p id="whole_name"></p></td>
+                        </tr>
+                        <tr>
+                            <td><h5>Username:</h5></td>
+                            <td><p id="username"></p></td>
+                        </tr>
+                        <tr>
+                            <td><h5>Email:</h5></td>
+                            <td><p id="email"></p></td>
+                        </tr>
+                    </table>
+                    <!-- Edit Profile
+                    Password/Change Password
+                    Saved Canvases
+                    Uploaded pictures -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="center">
+                    <button class="btn modal-trigger" id="change_text" type="button" data-target="modal_edit_profile">Edit Profile</button>
+                </div>
+            </div>
+            <div id="modal_edit_profile" class="modal">
+                <div class="modal-content">
+                    <h5 class="center">Edit Profile</h5>
+                    <form class="col offset-s3 s6" id="edit_profile_form" action="" method = "POST">
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="edit_first" class="validate" placeholder="" type ="text" name ="first" /></p>
+                                <label>First Name</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="edit_last" class="validate" placeholder="" type ="text" name ="last" /></p>
+                                <label>Last Name</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="edit_email" class="validate" placeholder="" type ="email" name ="email" /></p>
+                                <label>Email</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="edit_username" class="validate" placeholder="" type ="text" name ="username" /></p>
+                                <label>Username</label>
+                            </div>
+                        </div>
+                        <div class="hide">
+                            <input id="edit_profile_submit" type="submit" value = "Submit" /></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a id="apply_edited_profile" href="#!" onclick="" class="modal-close waves-effect waves-green btn-flat">Apply</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+                </div>
+            </div>
+            <!--JavaScript at end of body for optimized loading-->
+            <script type="text/javascript" src="static/js/materialize.min.js"></script>
+            <script type="text/javascript" src="static/js/init.js"></script>
+            <!-- Get the users information -->
+            <script>
+                username = ''
+                first = ''
+                last = ''
+                email = ''
+                $(document).ready(function(){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_user_username',
+                        success: function(data){
+                            username = data;
+                            $('#username').text(username);
+                            $('#edit_username').attr('placeholder', username);
+                            $('#username_dropdown').html(username + '<i class="material-icons right">arrow_drop_down</i>')             
+                        }
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_user_first_name',
+                        success: function(data){
+                            first = data;
+                            $('#edit_first').attr('placeholder', first);
+                        }
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_user_last_name',
+                        success: function(data){
+                            last = data;
+                            $('#edit_last').attr('placeholder', last);
+                            $('#whole_name').text(first + ' ' + last);
+                        }
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_user_email',
+                        success: function(data){
+                            email = data;    
+                            $('#edit_email').attr('placeholder', email);          
+                            $('#email').text(email);
+                        }
+                    });
+                });
+            </script>
+            <script>
+                $('#apply_edited_profile').on('click', function(){
+                    $('#edit_profile_submit').click()
+                });
+            </script>
+            <!-- Enables the dropdown -->
+            <script>
+                $( document ).ready(function(){
+                    $(".dropdown-trigger").dropdown();
+                });
+            </script>  
+        </body>
+    </html>
