@@ -13,7 +13,7 @@ class UserModel(UserMixin, db.Model):
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
     email = db.Column(db.String(80), unique=True)
-    username = db.Column(db.String(100))
+    username = db.Column(db.String(100), unique=True)
     password_hash = db.Column(db.String())
  
     def set_password(self,password):

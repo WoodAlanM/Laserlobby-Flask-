@@ -1,1 +1,2 @@
 Add password update functionality
+Make it so a name is required to save the canvas

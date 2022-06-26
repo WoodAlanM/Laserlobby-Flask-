@@ -269,17 +269,31 @@ def profile():
     if request.method == 'POST':
         current_id = current_user.id
         user = UserModel.query.filter_by(id=current_id).first()
+        try:
+            old_password = request.form['old_pass']
+            new_password = request.form['new_pass']
+            validate_password = request.form['validate_pass']
+            print("got here")
+            if not old_password == '' and not new_password == '' and not validate_password == '' and new_password == validate_password:
+                if user.check_password(old_password):
+                    user.set_password(new_password)
+                    db.session.commit()
+                    return redirect('/profile')
+        except:
+            print('didnt work right')
         email = request.form['email']
         username = request.form['username']
         first = request.form['first']
         last = request.form['last']
-        if first:
+        print(last)
+        if not first == '':
             user.first = first
-        if last:
+        if not last == '':
+            print("got to if")
             user.last = last
-        if username:
+        if not username == '':
             user.username = username
-        if email:
+        if not email == '':
             user.email = email
         db.session.commit()
         return redirect('/profile')

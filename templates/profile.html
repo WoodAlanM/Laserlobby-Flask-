@@ -47,16 +47,22 @@
                             <td><h5>Email:</h5></td>
                             <td><p id="email"></p></td>
                         </tr>
+                        <tr>
+                            <td>
+                                <div class="center">
+                                    <button class="btn modal-trigger" data-target="modal_edit_profile">Edit Profile</button>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="center">
+                                    <button class="btn modal-trigger" data-target="modal_change_password">Change Password</button>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                     <!-- Edit Profile
-                    Password/Change Password
                     Saved Canvases
                     Uploaded pictures -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="center">
-                    <button class="btn modal-trigger" id="change_text" type="button" data-target="modal_edit_profile">Edit Profile</button>
                 </div>
             </div>
             <div id="modal_edit_profile" class="modal">
@@ -87,7 +93,35 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <a id="apply_edited_profile" href="#!" onclick="" class="modal-close waves-effect waves-green btn-flat">Apply</a>
+                    <a id="apply_edited_profile" href="#!" class="modal-close waves-effect waves-green btn-flat">Apply</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+                </div>
+            </div>
+            <div id="modal_change_password" class="modal">
+                <div class="modal-content">
+                    <h5 class="center">Change Password</h5>
+                    <form class="col offset-s3 s6" id="change_password_form" action="" method = "POST">
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="old_password" class="validate" placeholder="Old Password" type ="password" name ="old_pass" /></p>
+                                <label>Old Password</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="new_password" class="validate" placeholder="New Password" type ="password" name ="new_pass" /></p>
+                                <label>New Password</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="=validate_password" class="validate" placeholder="Repeat New Password" type ="password" name ="validate_pass" /></p>
+                                <label>Repeat New Password</label>
+                            </div>
+                        </div>
+                        <div class="hide">
+                            <input id="change_password_submit" type="submit" value = "Submit" /></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a id="apply_changed_password" href="#!" class="modal-close waves-effect waves-green btn-flat">Apply</a>
                     <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
                 </div>
             </div>
@@ -142,6 +176,9 @@
             <script>
                 $('#apply_edited_profile').on('click', function(){
                     $('#edit_profile_submit').click()
+                });
+                $('#apply_changed_password').on('click', function(){
+                    $('#change_password_submit').click()
                 });
             </script>
             <!-- Enables the dropdown -->
