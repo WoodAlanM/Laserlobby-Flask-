@@ -16,6 +16,18 @@ class UserModel(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True)
     password_hash = db.Column(db.String())
  
+    def update_first_name(self, new_first_name):
+        self.first_name = new_first_name
+
+    def update_last_name(self, new_last_name):
+        self.last_name = new_last_name
+
+    def update_email(self, new_email):
+        self.email = new_email
+
+    def update_username(self, new_username):
+        self.username = new_username
+
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)
      

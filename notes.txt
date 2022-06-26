@@ -1,2 +1,2 @@
-Add password update functionality
 Make it so a name is required to save the canvas
+Eventually make it so the canvas automatically reloads after coming back to the editor.  Maybe save upon exiting page
