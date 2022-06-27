@@ -149,16 +149,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <button style="width: 100%" class="btn modal-trigger" id="change_text" type="button" data-target="modal_change_text">Change Text</button>
-                                </td>
-                            </tr>
-                            <tr>
                                 <div class="center">
                                     <td>
-                                        <button class="btn" style="width: 31%" id="bold">B</button>
-                                        <button class="btn" style="width: 31%" id="italic">I</button>
-                                        <button class="btn" style="width: 31%" id="underline">U</button>
+                                        <button class="btn" style="width: 31%" id="bold" onclick="boldToggle()">B</button>
+                                        <button class="btn" style="width: 31%" id="italic" onclick="italicToggle()">I</button>
+                                        <button class="btn" style="width: 31%" id="underline" onclick="underlineToggle()">U</button>
                                     </td>
                                 </div>
                             </tr>
@@ -264,19 +259,6 @@
                 </div>
             </div>
         </div>
-        <!-- This displays the modal for editing text -->
-        <div id="modal_change_text" class="modal">
-            <div class="modal-content">
-                <h5>Change text to:</h5>
-                <div class="input-field col s6">
-                    <input placeholder="" id="edited_text" type="text" class="validate">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a id="apply_edited_text" href="#!" onclick="changeText()" class="modal-close waves-effect waves-green btn-flat">Apply</a>
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
-            </div>
-        </div>
         <!-- This displays the modal for uploading an image -->
         <div id="modal_upload_picture" class="modal">
             <div class="modal-content">
@@ -349,16 +331,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <button style="width: 100%" class="btn modal-trigger" id="change_text" type="button" data-target="modal_change_text">Change Text</button>
-                            </td>
-                        </tr>
-                        <tr>
                             <div class="center">
                                 <td>
-                                    <button class="btn" style="width: 32%" id="bold_mobile">B</button>
-                                    <button class="btn" style="width: 32%" id="italic_mobile">I</button>
-                                    <button class="btn" style="width: 32%" id="underline_mobile">U</button>
+                                    <button class="btn" style="width: 32%" id="bold_mobile" onclick="boldToggle()">B</button>
+                                    <button class="btn" style="width: 32%" id="italic_mobile" onclick="italicToggle()">I</button>
+                                    <button class="btn" style="width: 32%" id="underline_mobile" onclick="underlineToggle()">U</button>
                                 </td>
                             </div>
                         </tr>

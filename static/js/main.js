@@ -453,17 +453,37 @@ function addText(){
     canvas.add(text);
 }
 
-// Changes text of a selected text object
-function changeText(){
-    var selected = canvas.getActiveObject()
-    var selected_type = canvas.getActiveObject().get('type')
-    console.log(selected_type)
-    if(selected_type == 'i-text'){
-        var new_text = $('#edited_text').val()
-        selected.text = new_text
-        canvas.renderAll()
-    }
-}
+// Listen for mouse hold and then enter itext editing
+canvas.on('mouse:down',function(e) {
+    interval = setInterval(function() {
+        var activeObj = canvas.getActiveObject();
+        var activeType = '';
+        if (activeObj){
+            objType = activeObj.get('type');
+        }
+        if(activeObj && objType == 'i-text'){
+            console.log('got here')
+            activeObj.selectAll();
+            activeObj.enterEditing();
+            activeObj.hiddenTextarea.focus();
+        }
+    },2000); // 500ms between each frame
+    
+}).on('mouse:up', function(e){
+    clearInterval(interval)
+});
+
+// // Changes text of a selected text object
+// function changeText(){
+//     var selected = canvas.getActiveObject()
+//     var selected_type = canvas.getActiveObject().get('type')
+//     console.log(selected_type)
+//     if(selected_type == 'i-text'){
+//         var new_text = $('#edited_text').val()
+//         selected.text = new_text
+//         canvas.renderAll()
+//     }
+// }
 
 // Fills font size and radius select boxes
 function fillFontSizes(){
@@ -616,6 +636,66 @@ $('#font_input_mobile')
             canvas.renderAll()
         }
 });
+
+// Function to change text to bold or back from
+function boldToggle(){
+    var activeObj = canvas.getActiveObject();
+    var objType = '';
+    if (activeObj){
+        objType = activeObj.get('type');
+    }
+    if(activeObj && objType == 'i-text'){
+        var weight = activeObj.get('fontWeight');
+        if(weight == 'bold'){
+            activeObj.fontWeight = '';
+            canvas.renderAll()
+        } else {
+            activeObj.fontWeight = 'bold';
+            canvas.renderAll()
+        }
+    }
+}
+
+// Function to change text to italic or back from
+function italicToggle(){
+    var activeObj = canvas.getActiveObject();
+    var objType = '';
+    if (activeObj){
+        objType = activeObj.get('type');
+    }
+    if(activeObj && objType == 'i-text'){
+        var style = activeObj.get('fontStyle');
+        if(style == 'italic'){
+            activeObj.fontStyle = '';
+            canvas.renderAll()
+        } else {
+            activeObj.fontStyle = 'italic';
+            canvas.renderAll()
+        }
+
+    }
+}
+
+// Function to change text to underline or back from
+function underlineToggle(){
+    var activeObj = canvas.getActiveObject();
+    var objType = '';
+    if (activeObj){
+        objType = activeObj.get('type');
+    }
+    if(activeObj && objType == 'i-text'){
+        var decoration = activeObj.get('underline');
+        if(decoration == true){
+            activeObj.set({dirty: true})
+            activeObj.underline = false;
+            canvas.renderAll()
+        } else {
+            activeObj.set({dirty: true})
+            activeObj.underline = true;
+            canvas.renderAll()
+        }
+    }
+}
 
 function editObject()
 {
