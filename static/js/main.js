@@ -99,9 +99,14 @@ $('#load_canvas').on('click', function(){
 
 // Changes image preview to display selected image
 $('#image_select').change(function(){
-
     var filename = $("#image_select").find(':selected').text();
     $('#image_preview').attr('src', '/static/users/' + username + '/grays/' + filename)
+});
+
+// Changes image preview to display selected image
+$('#image_select_mobile').change(function(){
+    var filename = $("#image_select_mobile").find(':selected').text();
+    $('#image_preview_mobile').attr('src', '/static/users/' + username + '/grays/' + filename)
 });
 
 // These are for adding shapes to the canvas
@@ -340,43 +345,43 @@ $('#color_range_mobile').change(function(){
     $('#color_preview_mobile').css('background-color', 'rgb(' + newValue + ',' + newValue + ',' + newValue + ')')
 });
 
-// Aligns items vertically or horizontally big screen
-// GROUP ON SELECTION
-canvas.on("selection:updated", function(e) {
-	var activeObj = canvas.getActiveObjects();
-    if(activeObj.length > 1) {
+// // Aligns items vertically or horizontally big screen
+// // GROUP ON SELECTION
+// canvas.on("selection:updated", function(e) {
+// 	var activeObj = canvas.getActiveObjects();
+//     if(activeObj.length > 1) {
         
-        var groupWidth = e.target.getWidth();
-        var groupHeight = e.target.getHeight();
+//         var groupWidth = e.target.getWidth();
+//         var groupHeight = e.target.getHeight();
         
-        e.target.forEachObject(function(obj) {
-            var itemWidth = obj.getBoundingRect().width;
-            var itemHeight = obj.getBoundingRect().height;
+//         e.target.forEachObject(function(obj) {
+//             var itemWidth = obj.getBoundingRect().width;
+//             var itemHeight = obj.getBoundingRect().height;
         
-            // OBJECT ALIGNMENT: " Vertical-CENTER "
-            // ================================
-            $('#objVAlignCenter').click(function() {
-                obj.set({
-                    left: (0 - itemWidth/2),
-                    originX: 'left'
-                });
-                obj.setCoords();
-                canvas.renderAll();
-            });
+//             // OBJECT ALIGNMENT: " Vertical-CENTER "
+//             // ================================
+//             $('#objVAlignCenter').click(function() {
+//                 obj.set({
+//                     left: (0 - itemWidth/2),
+//                     originX: 'left'
+//                 });
+//                 obj.setCoords();
+//                 canvas.renderAll();
+//             });
             
-            // OBJECT ALIGNMENT: " Horizontal-CENTER "
-            // ================================
-            $('#objHAlignCenter').click(function() {
-                obj.set({
-                    top: (0 - itemHeight/2),
-                    originY: 'top'
-                });
-                obj.setCoords();
-                canvas.renderAll();
-            });
-        });
-    }
-}); // END OF " SELECTION:CREATED "
+//             // OBJECT ALIGNMENT: " Horizontal-CENTER "
+//             // ================================
+//             $('#objHAlignCenter').click(function() {
+//                 obj.set({
+//                     top: (0 - itemHeight/2),
+//                     originY: 'top'
+//                 });
+//                 obj.setCoords();
+//                 canvas.renderAll();
+//             });
+//         });
+//     }
+// }); // END OF " SELECTION:CREATED "
  
 // Function for aligning objects
 function alignObjects(verticalOrHorizontal){
@@ -412,6 +417,8 @@ function alignObjects(verticalOrHorizontal){
 function getList(){
     $('#image_select').empty();
     $('#image_select').append('<option value="" disabled selected>Choose Image</option>');
+    $('#image_select_mobile').empty();
+    $('#image_select_mobile').append('<option value="" disabled selected>Choose Image</option>');
     $.ajax({
         type: 'POST',
         url: '/fill_list',
@@ -426,6 +433,7 @@ function populateList(a_name_list){
     
     for (let i = 0; i < a_name_list.length; i++) {
         $('#image_select').append('<option value="">' + a_name_list[i] + '</option>')
+        $('#image_select_mobile').append('<option value="">' + a_name_list[i] + '</option>')
     }
 }
 
@@ -439,7 +447,7 @@ function deleteItems(){
 // Adds a text to the canvas with "Some Text" as the base text
 function addText(){
     console.log(FONT_FAMILY)
-    var text = new fabric.Text("Some Text", {
+    var text = new fabric.IText("Some Text", {
         fontFamily: FONT_FAMILY
     }); 
     canvas.add(text);
@@ -449,7 +457,8 @@ function addText(){
 function changeText(){
     var selected = canvas.getActiveObject()
     var selected_type = canvas.getActiveObject().get('type')
-    if(selected_type == 'text'){
+    console.log(selected_type)
+    if(selected_type == 'i-text'){
         var new_text = $('#edited_text').val()
         selected.text = new_text
         canvas.renderAll()
@@ -588,7 +597,7 @@ $('#font_input')
         FONT_FAMILY = font_array[0]
         var selected = canvas.getActiveObject()
         var selected_type = canvas.getActiveObject().get('type')
-        if(selected_type == 'text'){
+        if(selected_type == 'i-text'){
             selected.fontFamily = font_array[0];
             canvas.renderAll()
         }
@@ -602,7 +611,7 @@ $('#font_input_mobile')
         FONT_FAMILY = font_array[0];
         var selected = canvas.getActiveObject()
         var selected_type = canvas.getActiveObject().get('type')
-        if(selected_type == 'text'){
+        if(selected_type == 'i-text'){
             selected.fontFamily = font_array[0];
             canvas.renderAll()
         }

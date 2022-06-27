@@ -48,7 +48,7 @@
             <div class="nav-content">
                 <ul class="tabs tabs-transparent">
                     <li class="tab"><a class="modal-trigger" href="#mobile_text_options">Text</a></li>
-                    <li class="tab"><a class="modal-trigger" href="#mobile_image_options">Image</a></li>
+                    <li class="tab"><a class="modal-trigger" href="#mobile_image_options" onclick="getList()">Image</a></li>
                     <li class="tab"><a class="modal-trigger" href="#mobile_shapes_options">Shapes</a></li>
                     <li class="tab"><a class="modal-trigger" href="#mobile_align_options">Align</a></li>
                     <li class="tab"><a id="mobile_delete" href="#" onclick="deleteItems()">Delete</a></li>
@@ -356,9 +356,9 @@
                         <tr>
                             <div class="center">
                                 <td>
-                                    <button class="btn" style="width: 32%" id="bold">B</button>
-                                    <button class="btn" style="width: 32%" id="italic">I</button>
-                                    <button class="btn" style="width: 32%" id="underline">U</button>
+                                    <button class="btn" style="width: 32%" id="bold_mobile">B</button>
+                                    <button class="btn" style="width: 32%" id="italic_mobile">I</button>
+                                    <button class="btn" style="width: 32%" id="underline_mobile">U</button>
                                 </td>
                             </div>
                         </tr>
@@ -377,14 +377,14 @@
                         <tr>
                             <td>
                                 <label>Select Image:</label>
-                                <select id="image_select" class="browser-default">
+                                <select id="image_select_mobile" class="browser-default">
                                     <option disabled selected>Images</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <button class="btn" style="width: 100%" id="add_image_button">Add</button>
+                                <button class="btn" style="width: 100%" id="add_image_button_mobile">Add</button>
                             </td>
                         </tr>
                         <tr>
@@ -397,7 +397,7 @@
                                 <div id="image_preview_div">
                                     <label>Image Preview:</label>
                                     <form>
-                                        <img id="image_preview" class="responsive-img" src="">
+                                        <img id="image_preview_mobile" class="responsive-img" src="">
                                     </form>
                                 </div>
                             </td>
@@ -548,7 +548,14 @@
         <!-- Adds image to the canvas -->
         <script>
             $('#add_image_button').click(function(){
-                addImage($('#image_select').find(':selected').text())
+                if($('image_select'.find(':selected').text()) != 'Choose Image'){
+                    addImage($('#image_select').find(':selected').text())
+                }
+            });
+            $('#add_image_button_mobile').click(function(){
+                if($('image_select_mobile').find(':selected').text() != 'Choose Image'){
+                    addImage($('#image_select_mobile').find(':selected').text())
+                }
             });
         </script>
         <script>
