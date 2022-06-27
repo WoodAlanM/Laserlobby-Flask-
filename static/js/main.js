@@ -1,4 +1,5 @@
-username = ''
+username = '';
+FONT_FAMILY = '';
 var isMobile = false
 $(document).ready(function(){
     $.ajax({
@@ -64,10 +65,17 @@ function changeAction(target) {
 
 // Save canvas stuff
 $('#save_canvas').on('click', function(){
+    var filename = $('#save_canvas_as').val();
+    if(filename != ''){
+        saveCanvas(filename);
+    }
+});
+
+function saveCanvas(filename){
     var canvas_json = JSON.stringify(canvas);
     $.ajax({
         type: 'POST',
-        url: '/save_canvas_json',
+        url: '/save_canvas_json/' + filename,
         data: canvas_json,
         success: function(return_data){
             if(return_data == "saved"){
@@ -76,7 +84,7 @@ $('#save_canvas').on('click', function(){
         }
     });
     canvas.clear()
-});
+}
 
 // Load canvas stuff
 $('#load_canvas').on('click', function(){
@@ -369,45 +377,36 @@ canvas.on("selection:updated", function(e) {
         });
     }
 }); // END OF " SELECTION:CREATED "
+ 
+// Function for aligning objects
+function alignObjects(verticalOrHorizontal){
+    var activeObj = canvas.getActiveObjects();
+    if(activeObj.length > 1){
 
+        var groupWidth = activeObj.width;
+        var groupHeight = activeObj.height;
 
-// Aligns items vertically or horizontally hopefully on mobile
-// GROUP ON SELECTION
-canvas.on("selection:updated", function(e) {
-	var activeObj = canvas.getActiveObjects();
-    if(activeObj.length > 1) {
-        
-        var groupWidth = e.target.getWidth();
-        var groupHeight = e.target.getHeight();
-        
-        e.target.forEachObject(function(obj) {
+        activeObj.forEach(function(obj){
             var itemWidth = obj.getBoundingRect().width;
             var itemHeight = obj.getBoundingRect().height;
-        
-            // OBJECT ALIGNMENT: " Vertical-CENTER "
-            // ================================
-            $('#objVAlignCenter').click(function() {
+            if(verticalOrHorizontal == "vertical"){
                 obj.set({
                     left: (0 - itemWidth/2),
                     originX: 'left'
                 });
                 obj.setCoords();
                 canvas.renderAll();
-            });
-            
-            // OBJECT ALIGNMENT: " Horizontal-CENTER "
-            // ================================
-            $('#objHAlignCenter').click(function() {
+            } else if(verticalOrHorizontal == "horizontal"){
                 obj.set({
                     top: (0 - itemHeight/2),
                     originY: 'top'
                 });
                 obj.setCoords();
                 canvas.renderAll();
-            });
+            }
         });
     }
-}); // END OF " SELECTION:CREATED "
+};
 
 // Populates the list of images.
 function getList(){
@@ -439,7 +438,10 @@ function deleteItems(){
 
 // Adds a text to the canvas with "Some Text" as the base text
 function addText(){
-    var text = new fabric.Text("Some Text");
+    console.log(FONT_FAMILY)
+    var text = new fabric.Text("Some Text", {
+        fontFamily: FONT_FAMILY
+    }); 
     canvas.add(text);
 }
 
@@ -582,10 +584,25 @@ function fitToDiv(a_canvas){
 $('#font_input')
     .fontpicker()
     .on('change', function() {
+        const font_array = this.value.split(':')
+        FONT_FAMILY = font_array[0]
         var selected = canvas.getActiveObject()
         var selected_type = canvas.getActiveObject().get('type')
         if(selected_type == 'text'){
-            const font_array = this.value.split(':')
+            selected.fontFamily = font_array[0];
+            canvas.renderAll()
+        }
+});
+
+// Shows font input on mobile
+$('#font_input_mobile')
+    .fontpicker()
+    .on('change', function() {
+        const font_array = this.value.split(':')
+        FONT_FAMILY = font_array[0];
+        var selected = canvas.getActiveObject()
+        var selected_type = canvas.getActiveObject().get('type')
+        if(selected_type == 'text'){
             selected.fontFamily = font_array[0];
             canvas.renderAll()
         }

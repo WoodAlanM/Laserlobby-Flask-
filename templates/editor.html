@@ -57,7 +57,7 @@
         </nav>
         
         <ul class="sidenav" id="mobile_sidenav">
-            <li><a href="#!" id="save_canvas">Save Canvas</a></li>
+            <li><a href="#!" class="modal-trigger" data-target="modal_save_canvas">Save Canvas</a></li>
             <li><a href="#!" id="load_canvas">Load Canvas</a></li>
             <li class="divider"></li>
             <li><a href="{{url_for('profile') }}">Profile</a></li>
@@ -67,7 +67,7 @@
         <!-- This navbar only appears on tablets and monitors -->
         <div class="navbar-fixed hide-on-med-and-down">
             <ul id="user_dropdown" class="dropdown-content">
-                <li><a href="#!" id="save_canvas">Save Canvas</a></li>
+                <li><a href="#!" class="modal-trigger" data-target="modal_save_canvas">Save Canvas</a></li>
                 <li><a href="#!" id="load_canvas">Load Canvas</a></li>
                 <li class="divider"></li>
                 <li><a href="{{url_for('profile') }}">Profile</a></li>
@@ -115,12 +115,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <button style="width: 100%" class="btn green" id="objVAlignCenter">Vertical Align</button>
+                                    <button style="width: 100%" class="btn green" id="objVAlignCenter" onclick="alignObjects('vertical')">Vertical Align</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button style="width: 100%" class="btn green" id="objHAlignCenter">Horizontal Align</button>
+                                    <button style="width: 100%" class="btn green" id="objHAlignCenter" onclick="alignObjects('horizontal')">Horizontal Align</button>
                                 </td>
                             </tr>
                             <tr>
@@ -321,7 +321,6 @@
             </div>
         </div>
         <!-- This displays a modal for saving the canvas -->
-        <!-- Left Off -->
         <div id="modal_save_canvas" class="modal">
             <div class="modal-content">
                 <h5>Save Canvas As:</h5>
@@ -330,7 +329,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="save_canvas" href="#!" onclick="" class="modal-close waves-effect waves-green btn-flat">Save</a>
+                <a id="save_canvas" href="#!" class="modal-close waves-effect waves-green btn-flat">Save</a>
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>
@@ -341,7 +340,7 @@
                     <table>
                         <tr>
                             <td>
-                                <input class="hide" id="font_input"/>
+                                <input class="hide" id="font_input_mobile"/>
                             </td>
                         </tr>
                         <tr>
@@ -489,12 +488,12 @@
                 <table>
                     <tr>
                         <td>
-                            <button style="width: 100%" class="btn green" id="objVAlignCenter_mobile">Vertical Align</button>
+                            <button style="width: 100%" class="btn green" id="objVAlignCenter_mobile" onclick="alignObjects('vertical')">Vertical Align</button>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <button style="width: 100%" class="btn green" id="objHAlignCenter_mobile">Horizontal Align</button>
+                            <button style="width: 100%" class="btn green" id="objHAlignCenter_mobile" onclick="alignObjects('horizontal')">Horizontal Align</button>
                         </td>
                     </tr>
                 </table>

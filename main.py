@@ -244,11 +244,12 @@ def fill_list():
     return gray_list_string
 
 
-@app.route('/save_canvas_json', methods=['POST'])
+@app.route('/save_canvas_json/<string:filename>', methods=['POST'])
 @login_required
-def save_canvas_json():
+def save_canvas_json(filename):
     save_json = request.get_json(force=True)
-    with open('data.json', 'w') as out_file:
+    os.chdir(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases'))
+    with open(filename + '.json', 'w') as out_file:
         json.dump(save_json, out_file, sort_keys = True, indent = 4, ensure_ascii = False)
     return "saved"
 

@@ -1,4 +1,4 @@
-Make it so a name is required to save the canvas
+Got it saving canvas with supplied name, however still running into trouble with permissions.
 Eventually make it so the canvas automatically reloads after coming back to the editor.  Maybe save upon exiting page
 Consider getting rid of spray
-work on alignment for mobile
+get an error cannot get properties of undefined when choosing a font before making text.  it still works, but that needs to be fixed eventually
