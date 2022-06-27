@@ -4,3 +4,10 @@
     display: block;
     background-color: rgb(123, 123, 123);
 }
+
+#color_preview_mobile {
+    height: 30px;
+    width: 100%;
+    display: block;
+    background-color: rgb(123, 123, 123);
+}

@@ -39,14 +39,40 @@
     </head>
 
     <body>
-        <div class="navbar-fixed">
+        <!-- This navbar only appears on mobile -->
+        <nav class="nav-extended hide-on-med-and-up blue">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">LaserLobby</a>
+                <a href="#" data-target="mobile_sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent">
+                    <li class="tab"><a class="modal-trigger" href="#mobile_text_options">Text</a></li>
+                    <li class="tab"><a class="modal-trigger" href="#mobile_image_options">Image</a></li>
+                    <li class="tab"><a class="modal-trigger" href="#mobile_shapes_options">Shapes</a></li>
+                    <li class="tab"><a class="modal-trigger" href="#mobile_align_options">Align</a></li>
+                    <li class="tab"><a id="mobile_delete" href="#" onclick="deleteItems()">Delete</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <ul class="sidenav" id="mobile_sidenav">
+            <li><a href="#!" id="save_canvas">Save Canvas</a></li>
+            <li><a href="#!" id="load_canvas">Load Canvas</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('profile') }}">Profile</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('logout') }}">Logout</a></li>
+        </ul>
+        <!-- This navbar only appears on tablets and monitors -->
+        <div class="navbar-fixed hide-on-med-and-down">
             <ul id="user_dropdown" class="dropdown-content">
                 <li><a href="#!" id="save_canvas">Save Canvas</a></li>
                 <li><a href="#!" id="load_canvas">Load Canvas</a></li>
                 <li class="divider"></li>
-                <li><a href = "{{url_for('profile') }}">Profile</a></li>
+                <li><a href="{{url_for('profile') }}">Profile</a></li>
                 <li class="divider"></li>
-                <li><a href = "{{url_for('logout') }}">Logout</a></li>
+                <li><a href="{{url_for('logout') }}">Logout</a></li>
             </ul>
             <nav class="blue">
                 <div class="nav-wrapper container">
@@ -59,7 +85,7 @@
         </div>
         <div id="image_editing_div"class="container">
             <div id="editing_row" class="row">
-                <div class="col l2 m2 s2">
+                <div class="col l2 m2 s2 hide-on-med-and-down">
                     <div class="controls">
                         <table>
                             <tr>
@@ -105,10 +131,11 @@
                         </table>
                     </div>
                 </div>
-                <div id="main_canvas_div" class="col l8 m8 s8">
+                <!-- Set to show across the whole screen on mobile -->
+                <div id="main_canvas_div" class="col l8 m8 s12">
                     <canvas id="main_canvas"></canvas>
                 </div>
-                <div id="tool_options" class="col l2 m2 s2">
+                <div id="tool_options" class="col l2 m2 s2 hide-on-med-and-down">
                     <div id="text_options" class="hide">
                         <table>
                             <tr>
@@ -173,27 +200,27 @@
                         <table>
                             <tr>
                                 <td>
-                                    <button class="btn" style="width: 100%" id="add_rect_button">Add Rectangle</button>
+                                    <button class="btn" style="width: 100%" id="add_rect_button" onclick="addRect()">Add Rectangle</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button class="btn" style="width: 100%" id="add_circle_button">Add Circle</button>
+                                    <button class="btn" style="width: 100%" id="add_circle_button" onclick="addCircle()">Add Circle</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button class="btn" style="width: 100%" id="add_triangle_button">Add Triangle</button>
+                                    <button class="btn" style="width: 100%" id="add_triangle_button" onclick="addTriangle()">Add Triangle</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button class="btn" style="width: 100%" id="add_star_button">Add Star</button>
+                                    <button class="btn" style="width: 100%" id="add_star_button" onclick="addStar()">Add Star</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button class="btn" style="width: 100%" id="add_heart_button">Add Heart</button>
+                                    <button class="btn" style="width: 100%" id="add_heart_button" onclick="addHeart()">Add Heart</button>
                                 </td>
                             </tr>
                             <tr>
@@ -305,6 +332,174 @@
             <div class="modal-footer">
                 <a id="save_canvas" href="#!" onclick="" class="modal-close waves-effect waves-green btn-flat">Save</a>
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+        <!-- This modal is for text options on mobile -->        
+        <div id="mobile_text_options" class="modal bottom-sheet">
+            <div class="modal-content">
+                <div id="text_options">
+                    <table>
+                        <tr>
+                            <td>
+                                <input class="hide" id="font_input"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button style="width: 100%" class="btn" id="add_text" type="button" onclick="addText()">Add Text</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button style="width: 100%" class="btn modal-trigger" id="change_text" type="button" data-target="modal_change_text">Change Text</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <div class="center">
+                                <td>
+                                    <button class="btn" style="width: 32%" id="bold">B</button>
+                                    <button class="btn" style="width: 32%" id="italic">I</button>
+                                    <button class="btn" style="width: 32%" id="underline">U</button>
+                                </td>
+                            </div>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+        <!-- This modal is for mobile images options -->
+        <div id="mobile_image_options" class="modal bottom-sheet">
+            <div class="modal-content">
+                <div id="image_options">
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Select Image:</label>
+                                <select id="image_select" class="browser-default">
+                                    <option disabled selected>Images</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_image_button">Add</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn modal-trigger" style="width: 100%" type="button" data-target="modal_upload_picture">Upload Image</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="image_preview_div">
+                                    <label>Image Preview:</label>
+                                    <form>
+                                        <img id="image_preview" class="responsive-img" src="">
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+        <!-- This modal is for mobile shapes options -->
+        <div id="mobile_shapes_options" class="modal bottom-sheet">
+            <div class="modal-content">
+                <div id="shapes_options">
+                    <table>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_rect_button" onclick="addRect()">Add Rectangle</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_circle_button" onclick="addCircle()">Add Circle</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_triangle_button" onclick="addTriangle()">Add Triangle</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_star_button" onclick="addStar()">Add Star</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn" style="width: 100%" id="add_heart_button_mobile" onclick="addHeart()">Add Heart</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="input-field col s12">
+                                    <select id="stroke_width_mobile">
+                                    </select>
+                                    <label>Stroke Width:</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="switch">
+                                    <label>
+                                        Fill:
+                                        <input id="fillcheck_mobile" type="checkbox">
+                                        <span class="lever"></span>
+                                        On
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Darkness Value:</label>
+                                <form action="#">
+                                    <p class="range-field">
+                                      <input type="range" id="color_range_mobile" min="0" max="245" />
+                                    </p>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="color_preview_mobile"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+        <!-- This modal is for mobal align options -->
+        <div id="mobile_align_options" class="modal bottom-sheet">
+            <div class="modal-content">
+                <table>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn green" id="objVAlignCenter_mobile">Vertical Align</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn green" id="objHAlignCenter_mobile">Horizontal Align</button>
+                        </td>
+                    </tr>
+                </table>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
         </div>
         <!--JavaScript at end of body for optimized loading-->
