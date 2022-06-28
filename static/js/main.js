@@ -445,7 +445,6 @@ function getCanvasList(page){
         type: 'POST',
         url: '/fill_canvas_list',
         success: function(canvas_list){
-            console.log('got here')
             if(canvas_list.length == 1){
                 populateCanvasList(canvas_list, page)
             } else {
@@ -462,7 +461,6 @@ function populateCanvasList(a_name_list , page){
             $('#canvases').append('<option value="">' + a_name_list[i] + '</option>');
         }
     } else if(page == 'profile'){
-        console.log('populate profile')
         for (let i = 0; i < a_name_list.length; i++) {
             $('#canvas_profile_list').append('<option value="">' + a_name_list[i] + '</option>');
         }
@@ -478,11 +476,10 @@ $('#canvas_delete').on('click', function(){
 function deleteCanvas(canvas_name){
     $.ajax({
         type: 'POST',
-        async: false,
         url: '/delete_canvas/' + canvas_name,
         success: function(data){
             if(data == 'success'){
-                getCanvasList('profile');
+                getCanvasList('profile')
             }
         }
     });

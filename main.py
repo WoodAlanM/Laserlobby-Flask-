@@ -302,13 +302,16 @@ def load_canvas_json(filename):
 @app.route('/delete_canvas/<string:filename>', methods=['POST'])
 @login_required
 def delete_canvas(filename):
-    os.remove(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename))
+    file_path = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename)
+    file_handle = open(file_path, 'r')
+    os.remove(file_path)
+    file_handle.close()
     return "success"
 
 
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
-def profile():
+def profile():        
     if request.method == 'POST':
         current_id = current_user.id
         print(current_id)
