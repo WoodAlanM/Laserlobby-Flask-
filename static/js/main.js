@@ -85,6 +85,13 @@ function saveCanvas(filename){
     canvas.clear()
 }
 
+$('#load_canvas').on('click', function(){
+    var filename = $("#canvases").find(':selected').text();
+    if(filename != ''){
+        loadCanvas(filename);
+    }
+});
+
 // Load canvas stuff
 function loadCanvas(filename){
     $.ajax({
@@ -426,6 +433,32 @@ function populateList(a_name_list){
     }
 }
 
+// Populates the canvas list.
+function getCanvasList(){
+    $('#canvases').empty();
+    $('#canvases').append('<option value="" disabled selected>Choose Canvas</option>');
+    $.ajax({
+        type: 'POST',
+        url: '/fill_canvas_list',
+        success: function(canvas_list){
+            console.log('got here')
+            if(canvas_list.length == 1){
+                populateCanvasList(canvas_list)
+            } else {
+                name_list = canvas_list.split("!and!");
+                populateCanvasList(name_list);
+            }
+            
+        }
+    });
+}
+
+function populateCanvasList(a_name_list){
+    
+    for (let i = 0; i <= a_name_list.length; i++) {
+        $('#canvases').append('<option value="">' + a_name_list[i] + '</option>');
+    }
+}
 // Deletes selected items from the canvas
 function deleteItems(){
     canvas.getActiveObjects().forEach((obj) => {

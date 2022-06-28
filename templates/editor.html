@@ -58,7 +58,7 @@
         
         <ul class="sidenav" id="mobile_sidenav">
             <li><a href="#!" class="modal-trigger" data-target="modal_save_canvas">Save Canvas</a></li>
-            <li><a href="#!" id="load_canvas">Load Canvas</a></li>
+            <li><a href="#!" class="modal-trigger" data-target="modal_load_canvas">Load Canvas</a></li>
             <li class="divider"></li>
             <li><a href="{{url_for('profile') }}">Profile</a></li>
             <li class="divider"></li>
@@ -68,7 +68,7 @@
         <div class="navbar-fixed hide-on-med-and-down">
             <ul id="user_dropdown" class="dropdown-content">
                 <li><a href="#!" class="modal-trigger" data-target="modal_save_canvas">Save Canvas</a></li>
-                <li><a href="#!" id="load_canvas">Load Canvas</a></li>
+                <li><a href="#!" class="modal-trigger" data-target="modal_load_canvas">Load Canvas</a></li>
                 <li class="divider"></li>
                 <li><a href="{{url_for('profile') }}">Profile</a></li>
                 <li class="divider"></li>
@@ -339,6 +339,19 @@
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>
+        <!-- This displays a modal for loading a canvas -->
+        <div id="modal_load_canvas" class="modal">
+            <div class="modal-content">
+                <h5>Load Canvas:</h5>
+                <div class="input-field col s12">
+                    <select id="canvases" class="browser-default"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" id="load_canvas" class="modal-close waves-effect waves-green btn-flat">Load</a>
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
         <!-- This modal is for text options on mobile -->        
         <div id="mobile_text_options" class="modal bottom-sheet">
             <div class="modal-content">
@@ -604,6 +617,7 @@
                         }
                     }
                 });
+                getCanvasList();
             });
         </script>
         <script>

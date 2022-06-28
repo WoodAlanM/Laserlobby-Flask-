@@ -27,6 +27,7 @@ UPLOAD_FOLDER = 'static/uploads/temp/'
 USERS_FOLDER = 'static/users/'
 
 GRAY_LIST = []
+CANVAS_LIST = []
 
 app.secret_key = "thekeytosuccessissweat"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -243,6 +244,18 @@ def fill_list():
     gray_list_string = "!and!".join(GRAY_LIST)
     return gray_list_string
 
+
+@app.route('/fill_canvas_list', methods=['POST'])
+@login_required
+def fill_canvas_list():
+    for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases')):
+        for name in files:
+            if not name in CANVAS_LIST:
+                CANVAS_LIST.append(name)
+    canvas_list_string = "!and!".join(CANVAS_LIST)
+    return canvas_list_string
+
+
 # This checks the users folder for a temp canvas that may have been saved
 @app.route('/check_for_temp', methods=['POST'])
 @login_required
@@ -280,7 +293,7 @@ def load_canvas_json(filename):
             data = json.load(json_file)
             os.remove(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'temp.json'))
         return data
-    file = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename + '.json')
+    file = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename)
     with open(file) as json_file:
         data = json.load(json_file)
     return data
