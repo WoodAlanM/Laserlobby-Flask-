@@ -304,8 +304,9 @@ def load_canvas_json(filename):
 def delete_canvas(filename):
     file_path = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename)
     file_handle = open(file_path, 'r')
+    file_descriptor = file_handle.fileno()
+    os.close(file_descriptor)
     os.remove(file_path)
-    file_handle.close()
     return "success"
 
 

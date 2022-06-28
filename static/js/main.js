@@ -451,7 +451,7 @@ function getCanvasList(page){
                 name_list = canvas_list.split("!and!");
                 populateCanvasList(name_list, page);
             }
-        }
+        },
     });
 }
 
@@ -481,7 +481,7 @@ function deleteCanvas(canvas_name){
             if(data == 'success'){
                 getCanvasList('profile')
             }
-        }
+        },
     });
 }
 
