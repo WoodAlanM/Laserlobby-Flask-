@@ -30,7 +30,7 @@
                 </nav>
             </div>
             <div class="row">
-                <div class="container center col offset-s4 s4">
+                <div class="container center col offset-l4 l4 s12">
                     <div class="center">
                         <h5 class="center">PROFILE</h5>
                     </div>
@@ -60,9 +60,38 @@
                             </td>
                         </tr>
                     </table>
-                    <!-- Edit Profile
-                    Saved Canvases
-                    Uploaded pictures -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="container center col offset-l4 l4 s12">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <h5>Saved Canvases:</h5>
+                                <div class="input-field col s12">
+                                    <select id="canvas_profile_list" class="browser-default"></select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button style="width: 100%" class="btn" id="canvas_load">Load</button>
+                            </td>
+                            <td>
+                                <button style="width: 100%" class="btn" id="canvas_delete">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="canvas_preview_div">
+                                    <label>Canvas Preview:</label>
+                                    <form>
+                                        <img id="canvas_preview" class="responsive-img" src="">
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>                   
                 </div>
             </div>
             <div id="modal_edit_profile" class="modal">
@@ -126,7 +155,9 @@
                 </div>
             </div>
             <!--JavaScript at end of body for optimized loading-->
+            <script type="text/javascript" src="static/js/fabric.js"></script>
             <script type="text/javascript" src="static/js/materialize.min.js"></script>
+            <script type="text/javascript" src="static/js/main.js"></script> 
             <script type="text/javascript" src="static/js/init.js"></script>
             <!-- Get the users information -->
             <script>
@@ -171,6 +202,7 @@
                             $('#email').text(email);
                         }
                     });
+                    getCanvasList('profile');
                 });
             </script>
             <script>

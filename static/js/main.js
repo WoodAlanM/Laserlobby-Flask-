@@ -82,7 +82,6 @@ function saveCanvas(filename){
             }
         }
     });
-    canvas.clear()
 }
 
 $('#load_canvas').on('click', function(){
@@ -434,31 +433,61 @@ function populateList(a_name_list){
 }
 
 // Populates the canvas list.
-function getCanvasList(){
-    $('#canvases').empty();
-    $('#canvases').append('<option value="" disabled selected>Choose Canvas</option>');
+function getCanvasList(page){
+    if(page == 'editor'){
+        $('#canvases').empty();
+        $('#canvases').append('<option value="" disabled selected>Choose Canvas</option>');
+    } else if(page == 'profile'){
+        $('#canvas_profile_list').empty();
+        $('#canvas_profile_list').append('<option value="" disabled selected>Choose Canvas</option>');
+    }
     $.ajax({
         type: 'POST',
         url: '/fill_canvas_list',
         success: function(canvas_list){
             console.log('got here')
             if(canvas_list.length == 1){
-                populateCanvasList(canvas_list)
+                populateCanvasList(canvas_list, page)
             } else {
                 name_list = canvas_list.split("!and!");
-                populateCanvasList(name_list);
+                populateCanvasList(name_list, page);
             }
-            
         }
     });
 }
 
-function populateCanvasList(a_name_list){
-    
-    for (let i = 0; i <= a_name_list.length; i++) {
-        $('#canvases').append('<option value="">' + a_name_list[i] + '</option>');
+function populateCanvasList(a_name_list , page){
+    if(page == 'editor'){
+        for (let i = 0; i < a_name_list.length; i++) {
+            $('#canvases').append('<option value="">' + a_name_list[i] + '</option>');
+        }
+    } else if(page == 'profile'){
+        console.log('populate profile')
+        for (let i = 0; i < a_name_list.length; i++) {
+            $('#canvas_profile_list').append('<option value="">' + a_name_list[i] + '</option>');
+        }
     }
 }
+
+$('#canvas_delete').on('click', function(){
+    var filename = $("#canvas_profile_list").find(':selected').text();
+    deleteCanvas(filename)
+});
+
+// Delete canvas
+function deleteCanvas(canvas_name){
+    $.ajax({
+        type: 'POST',
+        async: false,
+        url: '/delete_canvas/' + canvas_name,
+        success: function(data){
+            if(data == 'success'){
+                getCanvasList('profile');
+            }
+        }
+    });
+}
+
 // Deletes selected items from the canvas
 function deleteItems(){
     canvas.getActiveObjects().forEach((obj) => {

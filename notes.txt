@@ -1,2 +1,3 @@
 Got it saving canvas with supplied name, however still running into trouble with permissions.
 get an error cannot get properties of undefined when choosing a font before making text.  it still works, but that needs to be fixed eventually
+why is temp.json still loading when its not there?

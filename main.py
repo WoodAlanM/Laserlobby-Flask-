@@ -22,7 +22,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
 UPLOAD_FOLDER = 'static/uploads/temp/'
 USERS_FOLDER = 'static/users/'
 
@@ -297,6 +296,14 @@ def load_canvas_json(filename):
     with open(file) as json_file:
         data = json.load(json_file)
     return data
+
+
+# Deletes a canvas given a filename
+@app.route('/delete_canvas/<string:filename>', methods=['POST'])
+@login_required
+def delete_canvas(filename):
+    os.remove(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename))
+    return "success"
 
 
 @app.route('/profile', methods=['POST', 'GET'])
