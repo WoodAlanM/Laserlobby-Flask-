@@ -1,5 +1,3 @@
 Got it saving canvas with supplied name, however still running into trouble with permissions.
-Add 'Adjust' to mobile instead of align, inside add z-index adjustments or maybe bring forward push back
 Eventually make it so the canvas automatically reloads after coming back to the editor.  Maybe save upon exiting page
 get an error cannot get properties of undefined when choosing a font before making text.  it still works, but that needs to be fixed eventually
-Add check for isMobile on holdmouse feature

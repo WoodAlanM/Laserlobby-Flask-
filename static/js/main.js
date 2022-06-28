@@ -21,7 +21,7 @@ let erasingRemovesErasedObjects = false;
 const canvas = this.__canvas = new fabric.Canvas('main_canvas');
 
 function changeAction(target) {
-    ['select','text','image','shapes','spray'].forEach(action => {
+    ['select','text','image','shapes','adjust'].forEach(action => {
     const t = document.getElementById(action);
     t.classList.remove('btn-large');
     t.classList.remove('blue');
@@ -52,11 +52,10 @@ function changeAction(target) {
         $('#shapes_options').removeClass('hide');
         $('#shapes_options').addClass('show');
         break;
-    case "spray":
+    case "adjust":
         hideControls();
-        canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
-        canvas.freeDrawingBrush.width = 35;
-        canvas.isDrawingMode = true;
+        $('#adjust_options').removeClass('hide');
+        $('#adjust_options').addClass('show');
         break;
     default:
         break;
@@ -345,43 +344,32 @@ $('#color_range_mobile').change(function(){
     $('#color_preview_mobile').css('background-color', 'rgb(' + newValue + ',' + newValue + ',' + newValue + ')')
 });
 
-// // Aligns items vertically or horizontally big screen
-// // GROUP ON SELECTION
-// canvas.on("selection:updated", function(e) {
-// 	var activeObj = canvas.getActiveObjects();
-//     if(activeObj.length > 1) {
-        
-//         var groupWidth = e.target.getWidth();
-//         var groupHeight = e.target.getHeight();
-        
-//         e.target.forEachObject(function(obj) {
-//             var itemWidth = obj.getBoundingRect().width;
-//             var itemHeight = obj.getBoundingRect().height;
-        
-//             // OBJECT ALIGNMENT: " Vertical-CENTER "
-//             // ================================
-//             $('#objVAlignCenter').click(function() {
-//                 obj.set({
-//                     left: (0 - itemWidth/2),
-//                     originX: 'left'
-//                 });
-//                 obj.setCoords();
-//                 canvas.renderAll();
-//             });
-            
-//             // OBJECT ALIGNMENT: " Horizontal-CENTER "
-//             // ================================
-//             $('#objHAlignCenter').click(function() {
-//                 obj.set({
-//                     top: (0 - itemHeight/2),
-//                     originY: 'top'
-//                 });
-//                 obj.setCoords();
-//                 canvas.renderAll();
-//             });
-//         });
-//     }
-// }); // END OF " SELECTION:CREATED "
+// Change the z-index of current selection
+function changeZ(direction){
+    var activeObj = canvas.getActiveObject();
+    switch(direction){
+        case "forward":
+            canvas.bringForward(activeObj);
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
+        case "front":
+            canvas.bringToFront(activeObj);
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
+        case "backward":
+            canvas.sendBackwards(activeObj);
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
+        case "back":
+            canvas.sendToBack(activeObj);
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
+    }
+};
  
 // Function for aligning objects
 function alignObjects(verticalOrHorizontal){
@@ -462,28 +450,14 @@ canvas.on('mouse:down',function(e) {
             objType = activeObj.get('type');
         }
         if(activeObj && objType == 'i-text'){
-            console.log('got here')
             activeObj.selectAll();
             activeObj.enterEditing();
             activeObj.hiddenTextarea.focus();
         }
     },2000); // 500ms between each frame
-    
 }).on('mouse:up', function(e){
     clearInterval(interval)
 });
-
-// // Changes text of a selected text object
-// function changeText(){
-//     var selected = canvas.getActiveObject()
-//     var selected_type = canvas.getActiveObject().get('type')
-//     console.log(selected_type)
-//     if(selected_type == 'i-text'){
-//         var new_text = $('#edited_text').val()
-//         selected.text = new_text
-//         canvas.renderAll()
-//     }
-// }
 
 // Fills font size and radius select boxes
 function fillFontSizes(){
@@ -505,7 +479,7 @@ function fillLocation(){
 
 // Hides control options for each main object
 function hideControls(){
-    ['text_options', 'image_options', 'shapes_options'].forEach(tools => {
+    ['text_options', 'image_options', 'shapes_options', 'adjust_options'].forEach(tools => {
         const tool = document.getElementById(tools);
         tool.classList.remove('show');
         tool.classList.add('hide');

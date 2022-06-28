@@ -110,17 +110,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <button style="width: 100%" class="btn" id="spray" type="button" onclick="changeAction(this)">Spray</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button style="width: 100%" class="btn green" id="objVAlignCenter" onclick="alignObjects('vertical')">Vertical Align</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button style="width: 100%" class="btn green" id="objHAlignCenter" onclick="alignObjects('horizontal')">Horizontal Align</button>
+                                    <button style="width: 100%" class="btn" id="adjust" type="button" onclick="changeAction(this)">Adjust</button>
                                 </td>
                             </tr>
                             <tr>
@@ -252,6 +242,40 @@
                             <tr>
                                 <td>
                                     <div id="color_preview"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="adjust_options" class="hide">
+                        <table>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn green" id="objVAlignCenter" onclick="alignObjects('vertical')">Vertical Align</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn green" id="objHAlignCenter" onclick="alignObjects('horizontal')">Horizontal Align</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn yellow" id="objHAlignCenter" onclick="changeZ('forward')">Forward</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn yellow" id="objHAlignCenter" onclick="changeZ('front')">Front</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn yellow" id="objHAlignCenter" onclick="changeZ('backwards')">Backwards</button>
+                                </td>
+                            </tr>
+			                <tr>
+                                <td>
+                                    <button style="width: 100%" class="btn yellow" id="objHAlignCenter" onclick="changeZ('back')">Back</button>
                                 </td>
                             </tr>
                         </table>
@@ -473,6 +497,26 @@
                             <button style="width: 100%" class="btn green" id="objHAlignCenter_mobile" onclick="alignObjects('horizontal')">Horizontal Align</button>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn yellow" id="zForward_mobile" onclick="changeZ('forward')">Forward</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn yellow" id="zFront_mobile" onclick="changeZ('front')">Front</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn yellow" id="zBackwards_mobile" onclick="changeZ('backwards')">Backwards</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button style="width: 100%" class="btn yellow" id="zBack_mobile" onclick="changeZ('back')">Back</button>
+                        </td>
+                    </tr>
                 </table>
             <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
@@ -525,7 +569,7 @@
         <!-- Adds image to the canvas -->
         <script>
             $('#add_image_button').click(function(){
-                if($('image_select'.find(':selected').text()) != 'Choose Image'){
+                if($('image_select').find(':selected').text() != 'Choose Image'){
                     addImage($('#image_select').find(':selected').text())
                 }
             });
