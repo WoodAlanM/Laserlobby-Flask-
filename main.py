@@ -243,23 +243,45 @@ def fill_list():
     gray_list_string = "!and!".join(GRAY_LIST)
     return gray_list_string
 
+# This checks the users folder for a temp canvas that may have been saved
+@app.route('/check_for_temp', methods=['POST'])
+@login_required
+def check_for_temp():
+    for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username)):
+        for name in files:
+            if name == 'temp.json':
+                return "hastemp"
+    return "notemp"
 
+
+# Saves canvas given a filename
 @app.route('/save_canvas_json/<string:filename>', methods=['POST'])
 @login_required
 def save_canvas_json(filename):
     save_json = request.get_json(force=True)
+    if filename == 'temp':
+        os.chdir(os.path.join(BASEDIR, USERS_FOLDER, current_user.username))
+        with open('temp.json', 'w') as out_file:
+            json.dump(save_json, out_file, sort_keys = True, indent = 4, ensure_ascii = False)
+        return "temp saved"
     os.chdir(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases'))
     with open(filename + '.json', 'w') as out_file:
         json.dump(save_json, out_file, sort_keys = True, indent = 4, ensure_ascii = False)
     return "saved"
 
-
-@app.route('/load_canvas_json', methods=['POST'])
+# Loads a canvas given a filename
+@app.route('/load_canvas_json/<string:filename>', methods=['POST'])
 @login_required
-def load_canvas_json():
+def load_canvas_json(filename):
     # Change so a name for the canvas needs to be entered
-    filename = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'cavnases', 'data.json')
-    with open(filename) as json_file:
+    if filename == 'temp':
+        file = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, filename + '.json')
+        with open(file) as json_file:
+            data = json.load(json_file)
+            os.remove(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'temp.json'))
+        return data
+    file = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename + '.json')
+    with open(file) as json_file:
         data = json.load(json_file)
     return data
 

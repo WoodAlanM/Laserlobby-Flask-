@@ -50,7 +50,7 @@
                     <li class="tab"><a class="modal-trigger" href="#mobile_text_options">Text</a></li>
                     <li class="tab"><a class="modal-trigger" href="#mobile_image_options" onclick="getList()">Image</a></li>
                     <li class="tab"><a class="modal-trigger" href="#mobile_shapes_options">Shapes</a></li>
-                    <li class="tab"><a class="modal-trigger" href="#mobile_align_options">Align</a></li>
+                    <li class="tab"><a class="modal-trigger" href="#mobile_adjust_options">Adjust</a></li>
                     <li class="tab"><a id="mobile_delete" href="#" onclick="deleteItems()">Delete</a></li>
                 </ul>
             </div>
@@ -483,8 +483,8 @@
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
         </div>
-        <!-- This modal is for mobal align options -->
-        <div id="mobile_align_options" class="modal bottom-sheet">
+        <!-- This modal is for mobile adjustment options -->
+        <div id="mobile_adjust_options" class="modal bottom-sheet">
             <div class="modal-content">
                 <table>
                     <tr>
@@ -584,7 +584,7 @@
                 $(".dropdown-trigger").dropdown();
             });
         </script>   
-        
+        <!-- Get user name when the page loads -->
         <script>
             $(document).ready(function(){
                 $.ajax({
@@ -594,6 +594,21 @@
                         $('#username_dropdown').html(data + '<i class="material-icons right">arrow_drop_down</i>')
                     }
                 });
+                $.ajax({
+                    type: 'POST',
+                    url: '/check_for_temp',
+                    success: function(temp_exist){
+                        if(temp_exist == 'hastemp'){
+                            M.toast({html: 'Canvas Reloaded!'});
+                            loadCanvas('temp');
+                        }
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(window).on('beforeunload', function() {
+                saveCanvas('temp')
             });
         </script>
     </body>

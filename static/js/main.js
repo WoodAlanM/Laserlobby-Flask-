@@ -86,15 +86,16 @@ function saveCanvas(filename){
 }
 
 // Load canvas stuff
-$('#load_canvas').on('click', function(){
+function loadCanvas(filename){
     $.ajax({
         type: 'POST',
-        url: '/load_canvas_json',
+        url: '/load_canvas_json/' + filename,
         success: function(return_data){
             canvas.loadFromJSON(return_data)
         }
     });
-});
+}
+
 
 // Changes image preview to display selected image
 $('#image_select').change(function(){
