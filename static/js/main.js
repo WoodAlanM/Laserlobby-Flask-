@@ -445,7 +445,7 @@ function getCanvasList(page){
     $.ajax({
         type: 'POST',
         cache: false,
-        url: '/fill_canvas_list/' + (Math.random() * RANDOM_MAX),
+        url: '/fill_canvas_list',
         success: function(canvas_list){
             console.log(canvas_list)
             if(canvas_list.length == 1){

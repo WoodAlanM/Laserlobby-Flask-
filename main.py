@@ -247,9 +247,9 @@ def fill_list():
 # Try this query select change and see if it makes a difference
 # atleadt then well have a direction.
 # try time delta if get doesnt work
-@app.route('/fill_canvas_list/<string:time_delta>', methods=['POST'])
+@app.route('/fill_canvas_list', methods=['POST'])
 @login_required
-def fill_canvas_list(time_delta):
+def fill_canvas_list():
     for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases')):
       for name in files:
         if not name in CANVAS_LIST:
