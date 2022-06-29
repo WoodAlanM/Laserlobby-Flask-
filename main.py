@@ -251,9 +251,9 @@ def fill_list():
 @login_required
 def fill_canvas_list(time_delta):
     for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases')):
-        for name in files:
-            if not name in CANVAS_LIST:
-                CANVAS_LIST.append(name)
+      for name in files:
+        if not name in CANVAS_LIST:
+          CANVAS_LIST.append(name)
     canvas_list_string = "!and!".join(CANVAS_LIST)
     return canvas_list_string
 
