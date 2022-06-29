@@ -50,12 +50,12 @@
                         <tr>
                             <td>
                                 <div class="center">
-                                    <button class="btn modal-trigger" data-target="modal_edit_profile">Edit Profile</button>
+                                    <button style="width: 100%" class="btn modal-trigger" data-target="modal_edit_profile">Edit Profile</button>
                                 </div>
                             </td>
                             <td>
                                 <div class="center">
-                                    <button class="btn modal-trigger" data-target="modal_change_password">Change Password</button>
+                                    <button style="width: 100%" class="btn modal-trigger" data-target="modal_change_password">Change Password</button>
                                 </div>
                             </td>
                         </tr>
@@ -207,11 +207,32 @@
             </script>
             <script>
                 $('#apply_edited_profile').on('click', function(){
-                    $('#edit_profile_submit').click()
+                    var form_data = new FormData($('#edit_profile_form')[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/profile/profile',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data){
+                        }
+                    });
                     M.toast({html: 'Profile Updated.'})
                 });
                 $('#apply_changed_password').on('click', function(){
-                    $('#change_password_submit').click()
+                    var form_data = new FormData($('#change_password_form')[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/profile/password',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(data){
+                        }
+                    });
+                    M.toast({html: 'Password Updated.'})
                 });
             </script>
             <!-- Enables the dropdown -->

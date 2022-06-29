@@ -304,30 +304,28 @@ def load_canvas_json(filename):
 def delete_canvas(filename):
     file_path = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename)
     file_handle = open(file_path, 'r')
-    file_descriptor = file_handle.fileno()
-    os.close(file_descriptor)
     os.remove(file_path)
-    return "success"
+    return filename
 
 
-@app.route('/profile', methods=['POST', 'GET'])
+@app.route('/profile', defaults={'direction': 'base'})
+@app.route('/profile/<string:direction>', methods=['POST', 'GET'])
 @login_required
-def profile():        
-    if request.method == 'POST':
-        current_id = current_user.id
-        print(current_id)
-        user = db.session.query(UserModel).filter_by(id=current_id).first()
-        try:
-            old_password = request.form['old_pass']
-            new_password = request.form['new_pass']
-            validate_password = request.form['validate_pass']
-            if not old_password == '' and not new_password == '' and not validate_password == '' and new_password == validate_password:
-                if user.check_password(old_password):
-                    user.set_password(new_password)
-                    db.session.commit()
-                    return redirect('/profile')
-        except:
-            print('Gotta figure out a way around this.')
+def profile(direction):  
+    current_id = current_user.id
+    user = db.session.query(UserModel).filter_by(id=current_id).first()
+    if direction == 'base':
+        return render_template('profile.html')
+    if direction == 'password':      
+        old_password = request.form['old_pass']
+        new_password = request.form['new_pass']
+        validate_password = request.form['validate_pass']
+        if not old_password == '' and not new_password == '' and not validate_password == '' and new_password == validate_password:
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                db.session.commit()
+                return redirect('/profile')
+    if direction == 'profile':       
         email = request.form['email']
         username = request.form['username']
         first = request.form['first']
@@ -342,7 +340,7 @@ def profile():
             user.update_email(email)
         db.session.commit()
         return redirect('/profile')
-    return render_template('profile.html')
+        
 
 
 @app.route('/get_user_username', methods=['POST'])
@@ -374,5 +372,4 @@ def get_user_last_name():
 
 
 if __name__ == '__main__':
-    
     app.run(host="0.0.0.0", port=80)

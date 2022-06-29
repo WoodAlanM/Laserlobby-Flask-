@@ -443,6 +443,8 @@ function getCanvasList(page){
     }
     $.ajax({
         type: 'POST',
+        async: false,
+        cache: false,
         url: '/fill_canvas_list',
         success: function(canvas_list){
             if(canvas_list.length == 1){
@@ -469,18 +471,18 @@ function populateCanvasList(a_name_list , page){
 
 $('#canvas_delete').on('click', function(){
     var filename = $("#canvas_profile_list").find(':selected').text();
-    deleteCanvas(filename)
+    deleteCanvas(filename);
+    getCanvasList()
 });
 
 // Delete canvas
 function deleteCanvas(canvas_name){
     $.ajax({
         type: 'POST',
+        async: false,
+        cache: false,
         url: '/delete_canvas/' + canvas_name,
         success: function(data){
-            if(data == 'success'){
-                getCanvasList('profile')
-            }
         },
     });
 }
