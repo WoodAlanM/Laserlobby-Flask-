@@ -1,5 +1,6 @@
 username = '';
 FONT_FAMILY = '';
+RANDOM_MAX = 1000;
 var isMobile = false
 $(document).ready(function(){
     $.ajax({
@@ -443,10 +444,10 @@ function getCanvasList(page){
     }
     $.ajax({
         type: 'POST',
-        async: false,
         cache: false,
-        url: '/fill_canvas_list',
+        url: '/fill_canvas_list/' + (Math.random() * RANDOM_MAX),
         success: function(canvas_list){
+            console.log(canvas_list)
             if(canvas_list.length == 1){
                 populateCanvasList(canvas_list, page)
             } else {
@@ -472,17 +473,15 @@ function populateCanvasList(a_name_list , page){
 $('#canvas_delete').on('click', function(){
     var filename = $("#canvas_profile_list").find(':selected').text();
     deleteCanvas(filename);
-    getCanvasList()
 });
 
 // Delete canvas
 function deleteCanvas(canvas_name){
     $.ajax({
         type: 'POST',
-        async: false,
-        cache: false,
         url: '/delete_canvas/' + canvas_name,
         success: function(data){
+            getCanvasList('profile')
         },
     });
 }

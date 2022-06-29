@@ -243,10 +243,12 @@ def fill_list():
     gray_list_string = "!and!".join(GRAY_LIST)
     return gray_list_string
 
-
-@app.route('/fill_canvas_list', methods=['POST'])
+# Try this query select change and see if it makes a difference
+# atleadt then well have a direction.
+# try time delta if get doesnt work
+@app.route('/fill_canvas_list/<string:time_delta>', methods=['POST'])
 @login_required
-def fill_canvas_list():
+def fill_canvas_list(time_delta):
     for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases')):
         for name in files:
             if not name in CANVAS_LIST:
