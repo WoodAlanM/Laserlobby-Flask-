@@ -617,7 +617,9 @@
                         }
                     }
                 });
-                getCanvasList('editor');
+                getCanvasList('editor').then((canvas_list) => {
+                    populateCanvasList(canvas_list, 'editor');
+                });
             });
         </script>
         <script>

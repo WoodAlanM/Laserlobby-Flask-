@@ -202,7 +202,9 @@
                             $('#email').text(email);
                         }
                     });
-                    getCanvasList('profile');
+                    getCanvasList('profile').then((canvas_list) => {
+                        populateCanvasList(canvas_list, 'profile');
+                    });
                 });
             </script>
             <script>

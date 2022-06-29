@@ -435,54 +435,63 @@ function populateList(a_name_list){
 
 // Populates the canvas list.
 function getCanvasList(page){
-    if(page == 'editor'){
-        $('#canvases').empty();
-        $('#canvases').append('<option value="" disabled selected>Choose Canvas</option>');
-    } else if(page == 'profile'){
-        $('#canvas_profile_list').empty();
-        $('#canvas_profile_list').append('<option value="" disabled selected>Choose Canvas</option>');
-    }
-    $.ajax({
-        type: 'POST',
-        cache: false,
-        url: '/fill_canvas_list',
-        success: function(canvas_list){
-            console.log(canvas_list)
-            if(canvas_list.length == 1){
-                populateCanvasList(canvas_list, page)
-            } else {
-                name_list = canvas_list.split("!and!");
-                populateCanvasList(name_list, page);
+    return new Promise((resolve, reject) => {
+        if(page == 'editor'){
+            $('#canvases').empty();
+            $('#canvases').append('<option value="" disabled selected>Choose Canvas</option>');
+        } else if(page == 'profile'){
+            $('#canvas_profile_list').empty();
+            $('#canvas_profile_list').append('<option value="" disabled selected>Choose Canvas</option>');
+        }
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: '/fill_canvas_list',
+            success: function(canvas_list){
+                resolve(canvas_list);
+            },
+            error: function(error){
+                reject(error);
             }
-        },
+        });
     });
 }
 
 function populateCanvasList(a_name_list , page){
+    name_list = a_name_list.split('!and!');
     if(page == 'editor'){
-        for (let i = 0; i < a_name_list.length; i++) {
-            $('#canvases').append('<option value="">' + a_name_list[i] + '</option>');
+        for (let i = 0; i < name_list.length; i++) {
+            $('#canvases').append('<option value="">' + name_list[i] + '</option>');
         }
     } else if(page == 'profile'){
-        for (let i = 0; i < a_name_list.length; i++) {
-            $('#canvas_profile_list').append('<option value="">' + a_name_list[i] + '</option>');
+        for (let i = 0; i < name_list.length; i++) {
+            $('#canvas_profile_list').append('<option value="">' + name_list[i] + '</option>');
         }
     }
 }
 
 $('#canvas_delete').on('click', function(){
     var filename = $("#canvas_profile_list").find(':selected').text();
-    deleteCanvas(filename);
+    deleteCanvas(filename).then((data) => {
+        getCanvasList('profile').then((canvas_list) => {
+            populateCanvasList(canvas_list, 'profile');
+        });
+    });
 });
 
 // Delete canvas
 function deleteCanvas(canvas_name){
-    $.ajax({
-        type: 'POST',
-        url: '/delete_canvas/' + canvas_name,
-        success: function(data){
-            getCanvasList('profile')
-        },
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: 'POST',
+            url: '/delete_canvas/' + canvas_name,
+            success: function(data){
+                resolve(data)
+            },
+            error: function(error){
+                reject(error)
+            }
+        });
     });
 }
 
