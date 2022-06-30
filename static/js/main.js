@@ -444,9 +444,10 @@ function getCanvasList(page){
             $('#canvas_profile_list').append('<option value="" disabled selected>Choose Canvas</option>');
         }
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             cache: false,
-            url: '/fill_canvas_list',
+            async: false,
+            url: '/fill_canvas_list/',
             success: function(canvas_list){
                 resolve(canvas_list);
             },
@@ -483,7 +484,8 @@ $('#canvas_delete').on('click', function(){
 function deleteCanvas(canvas_name){
     return new Promise((resolve, reject) => {
         $.ajax({
-            type: 'POST',
+            type: 'GET',
+            cache: false,
             url: '/delete_canvas/' + canvas_name,
             success: function(data){
                 resolve(data)

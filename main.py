@@ -247,13 +247,14 @@ def fill_list():
 # Try this query select change and see if it makes a difference
 # atleadt then well have a direction.
 # try time delta if get doesnt work
-@app.route('/fill_canvas_list', methods=['POST'])
+@app.route('/fill_canvas_list/', methods=['GET'])
 @login_required
 def fill_canvas_list():
     for (root,dirs,files) in os.walk(os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases')):
       for name in files:
         if not name in CANVAS_LIST:
           CANVAS_LIST.append(name)
+          print(CANVAS_LIST)
     canvas_list_string = "!and!".join(CANVAS_LIST)
     return canvas_list_string
 
@@ -302,11 +303,10 @@ def load_canvas_json(filename):
 
 
 # Deletes a canvas given a filename
-@app.route('/delete_canvas/<string:filename>', methods=['POST'])
+@app.route('/delete_canvas/<string:filename>', methods=['GET'])
 @login_required
-def delete_canvas(filename):
+def delete_canvas(filename):    
     file_path = os.path.join(BASEDIR, USERS_FOLDER, current_user.username, 'canvases', filename)
-    file_handle = open(file_path, 'r')
     os.remove(file_path)
     return filename
 
